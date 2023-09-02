@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "696305572172",
+    "project_id": "affapplication-d6774",
+    "storage_bucket": "affapplication-d6774.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696305572172:android:62c6f53d4ee228b3f3d7e9",
+        "android_client_info": {
+          "package_name": "sky.tavrov.affapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696305572172-l9itasqjde37gogja0ppdmqg604f5bt6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sky.tavrov.affapplication",
+            "certificate_hash": "76153b3c7ef0c3ebf9d040b9f9bf785d6d93172f"
+          }
+        },
+        {
+          "client_id": "696305572172-9jviu2o2e7betkiqdu8m4vktr36bp5s7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAe2l08wZIYI_ipISq35G062a-EXhtojwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696305572172-9jviu2o2e7betkiqdu8m4vktr36bp5s7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
