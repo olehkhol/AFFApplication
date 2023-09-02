@@ -1,8 +1,10 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.AFFApplication" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/vibrantIndigo</item>
+        <item name="colorPrimaryDark">@color/peepSapphire</item>
+        <item name="colorAccent">@color/turquoiseSplash</item>
     </style>
 
     <style name="Theme.AFFApplication" parent="Base.Theme.AFFApplication" />
