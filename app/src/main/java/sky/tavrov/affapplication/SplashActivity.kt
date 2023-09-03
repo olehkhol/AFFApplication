@@ -8,13 +8,18 @@ import android.os.Handler
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import sky.tavrov.affapplication.databinding.ActivitySplashBinding
 
 @SuppressLint("CustomSplashScreen") // TODO https://developer.android.com/guide/topics/ui/splash-screen
 @Suppress("DEPRECATION")
 class SplashActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySplashBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())
