@@ -1,7 +1,8 @@
-package sky.tavrov.affapplication
+package sky.tavrov.affapplication.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import sky.tavrov.affapplication.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
