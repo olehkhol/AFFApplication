@@ -7,7 +7,7 @@
     android:background="@drawable/img_splash_background"
     tools:context=".activities.MainActivity">
 
-    <sky.tavrov.affapplication.widgets.MSPBoldTextView
+    <sky.tavrov.affapplication.widgets.MSPTextViewBold
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
