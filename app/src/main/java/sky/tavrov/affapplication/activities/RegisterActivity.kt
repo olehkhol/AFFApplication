@@ -2,21 +2,20 @@ package sky.tavrov.affapplication.activities
 
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
-import sky.tavrov.affapplication.R
-import sky.tavrov.affapplication.databinding.ActivityLoginBinding
+import androidx.appcompat.app.AppCompatActivity
+import sky.tavrov.affapplication.databinding.ActivityRegisterBinding
 
 @Suppress("DEPRECATION")
-class LoginActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: ActivityRegisterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -28,8 +27,8 @@ class LoginActivity : AppCompatActivity() {
             )
         }
 
-        binding.tvRegister.setOnClickListener {
-            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+        binding.tvLogin.setOnClickListener {
+            val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
