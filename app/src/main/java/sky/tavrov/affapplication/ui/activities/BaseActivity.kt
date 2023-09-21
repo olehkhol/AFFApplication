@@ -1,21 +1,14 @@
-package sky.tavrov.affapplication.activities
+package sky.tavrov.affapplication.ui.activities
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import sky.tavrov.affapplication.R
-import sky.tavrov.affapplication.databinding.ActivityBaseBinding
+import sky.tavrov.affapplication.ui.custom.ProgressDialogWrapper
 
 open class BaseActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityBaseBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityBaseBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-    }
+    private val progressDialogWrapper by lazy { ProgressDialogWrapper(this) }
 
     fun showErrorSnackBar(message: String, isError: Boolean) {
         val snackBar =
@@ -39,5 +32,13 @@ open class BaseActivity : AppCompatActivity() {
         }
 
         snackBar.show()
+    }
+
+    fun showProgressDialog(text: String) {
+        progressDialogWrapper.show(text)
+    }
+
+    fun hideProgressDialog() {
+        progressDialogWrapper.hide()
     }
 }

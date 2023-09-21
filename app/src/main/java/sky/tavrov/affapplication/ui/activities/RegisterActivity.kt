@@ -1,4 +1,4 @@
-package sky.tavrov.affapplication.activities
+package sky.tavrov.affapplication.ui.activities
 
 import android.content.Intent
 import android.os.Build
@@ -32,24 +32,34 @@ class RegisterActivity : BaseActivity() {
             finish()
         }
         binding.btnRegister.setOnClickListener {
-            if (validateRegisterDetails()) {
-                val email = binding.etEmail.text.toString().trim { it <= ' ' }
-                val password = binding.etPassword.text.toString().trim { it <= ' ' }
+            registerUser()
+        }
+    }
 
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val firebaseUser = task.result.user
+    private fun registerUser() {
+        if (validateRegisterDetails()) {
 
-                            showErrorSnackBar(
-                                "You are registered successfully. Your user id is ${firebaseUser?.uid}",
-                                false
-                            )
-                        } else {
-                            showErrorSnackBar(task.exception?.message.toString(), true)
-                        }
+            showProgressDialog(resources.getString(R.string.please_wait))
+
+            val email = binding.etEmail.text.toString().trim { it <= ' ' }
+            val password = binding.etPassword.text.toString().trim { it <= ' ' }
+
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+
+                    hideProgressDialog()
+
+                    if (task.isSuccessful) {
+                        val firebaseUser = task.result.user
+
+                        showErrorSnackBar(
+                            "You are registered successfully. Your user id is ${firebaseUser?.uid}",
+                            false
+                        )
+                    } else {
+                        showErrorSnackBar(task.exception?.message.toString(), true)
                     }
-            }
+                }
         }
     }
 

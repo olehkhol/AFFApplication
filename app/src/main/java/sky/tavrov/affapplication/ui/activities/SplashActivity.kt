@@ -1,4 +1,4 @@
-package sky.tavrov.affapplication.activities
+package sky.tavrov.affapplication.ui.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
