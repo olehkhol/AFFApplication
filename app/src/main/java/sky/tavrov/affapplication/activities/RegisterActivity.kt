@@ -5,6 +5,9 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.databinding.ActivityRegisterBinding
 
@@ -25,9 +28,29 @@ class RegisterActivity : BaseActivity() {
                     this,
                     LoginActivity::class.java
                 )
-            ); finish()
+            )
+            finish()
         }
-        binding.btnRegister.setOnClickListener { validateRegisterDetails() }
+        binding.btnRegister.setOnClickListener {
+            if (validateRegisterDetails()) {
+                val email = binding.etEmail.text.toString().trim { it <= ' ' }
+                val password = binding.etPassword.text.toString().trim { it <= ' ' }
+
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val firebaseUser = task.result.user
+
+                            showErrorSnackBar(
+                                "You are registered successfully. Your user id is ${firebaseUser?.uid}",
+                                false
+                            )
+                        } else {
+                            showErrorSnackBar(task.exception?.message.toString(), true)
+                        }
+                    }
+            }
+        }
     }
 
     private fun setFullScreenMode() {
@@ -86,10 +109,7 @@ class RegisterActivity : BaseActivity() {
                 false
             }
 
-            else -> {
-                showErrorSnackBar(resources.getString(R.string.register_success), false)
-                true
-            }
+            else -> true
         }
     }
 }
