@@ -14,12 +14,6 @@
         android:theme="@style/Theme.AFFApplication"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activities.BaseActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activities.RegisterActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.activities.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -32,8 +26,16 @@
             android:name=".ui.activities.MainActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.activities.BaseActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.LoginActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.activities.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.ForgotPasswordActivity"
+            android:exported="false" />
     </application>
-
 </manifest>

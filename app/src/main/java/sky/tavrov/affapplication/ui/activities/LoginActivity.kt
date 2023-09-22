@@ -1,15 +1,11 @@
 package sky.tavrov.affapplication.ui.activities
 
-import android.os.Build
 import android.os.Bundle
-import android.view.WindowInsets
-import android.view.WindowManager
 import com.google.firebase.auth.FirebaseAuth
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.databinding.ActivityLoginBinding
 import sky.tavrov.affapplication.ui.utils.startActivityFor
 
-@Suppress("DEPRECATION")
 class LoginActivity : BaseActivity() {
 
     private lateinit var binding: ActivityLoginBinding
@@ -19,14 +15,7 @@ class LoginActivity : BaseActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
+        setFullScreenMode()
 
         with(binding) {
             tvRegister.setOnClickListener {
@@ -36,7 +25,7 @@ class LoginActivity : BaseActivity() {
                 loginRegisteredUser()
             }
             tvForgotPassword.setOnClickListener {
-                // Handle the forgot password click here.
+                startActivityFor<ForgotPasswordActivity>()
             }
         }
     }

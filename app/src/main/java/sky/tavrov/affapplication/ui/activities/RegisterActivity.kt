@@ -1,14 +1,10 @@
 package sky.tavrov.affapplication.ui.activities
 
-import android.os.Build
 import android.os.Bundle
-import android.view.WindowInsets
-import android.view.WindowManager
 import com.google.firebase.auth.FirebaseAuth
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.databinding.ActivityRegisterBinding
 
-@Suppress("DEPRECATION")
 class RegisterActivity : BaseActivity() {
 
     private val binding by lazy { ActivityRegisterBinding.inflate(layoutInflater) }
@@ -56,17 +52,6 @@ class RegisterActivity : BaseActivity() {
                         showErrorSnackBar(task.exception?.message.toString(), true)
                     }
                 }
-        }
-    }
-
-    private fun setFullScreenMode() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
         }
     }
 
