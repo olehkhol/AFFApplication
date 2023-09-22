@@ -1,12 +1,9 @@
 package sky.tavrov.affapplication.ui.activities
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.databinding.ActivityRegisterBinding
@@ -22,17 +19,13 @@ class RegisterActivity : BaseActivity() {
 
         setFullScreenMode()
         setupActionBar()
-        binding.tvLogin.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    LoginActivity::class.java
-                )
-            )
-            finish()
-        }
-        binding.btnRegister.setOnClickListener {
-            registerUser()
+        with(binding) {
+            tvLogin.setOnClickListener {
+                onBackPressed()
+            }
+            btnRegister.setOnClickListener {
+                registerUser()
+            }
         }
     }
 
@@ -56,6 +49,9 @@ class RegisterActivity : BaseActivity() {
                             "You are registered successfully. Your user id is ${firebaseUser?.uid}",
                             false
                         )
+
+                        FirebaseAuth.getInstance().signOut()
+                        finish()
                     } else {
                         showErrorSnackBar(task.exception?.message.toString(), true)
                     }
