@@ -1,9 +1,14 @@
 package sky.tavrov.affapplication.ui.activities
 
 import android.os.Bundle
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import sky.tavrov.affapplication.R
+import sky.tavrov.affapplication.data.firestore.FirestoreClass
+import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.databinding.ActivityRegisterBinding
+import sky.tavrov.affapplication.ui.utils.trimWhitespace
 
 class RegisterActivity : BaseActivity() {
 
@@ -26,33 +31,55 @@ class RegisterActivity : BaseActivity() {
     }
 
     private fun registerUser() {
-        if (validateRegisterDetails()) {
+        if (!validateRegisterDetails()) return
 
-            showProgressDialog(resources.getString(R.string.please_wait))
+        showProgressDialog(resources.getString(R.string.please_wait))
 
-            val email = binding.etEmail.text.toString().trim { it <= ' ' }
-            val password = binding.etPassword.text.toString().trim { it <= ' ' }
+        with(binding) {
+            val email = etEmail.text.toString().trimWhitespace()
+            val password = etPassword.text.toString().trimWhitespace()
 
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
 
-                    hideProgressDialog()
-
                     if (task.isSuccessful) {
-                        val firebaseUser = task.result.user
-
+                        val firebaseUser: FirebaseUser = task.result!!.user!!
+                        val user = User(
+                            firebaseUser.uid,
+                            etFirstName.text.toString().trimWhitespace(),
+                            etLastName.text.toString().trimWhitespace(),
+                            email
+                        )
                         showErrorSnackBar(
-                            "You are registered successfully. Your user id is ${firebaseUser?.uid}",
+                            "You are registered successfully. Your user id is ${user.id}",
                             false
                         )
 
-                        FirebaseAuth.getInstance().signOut()
-                        finish()
+                        FirestoreClass().registerUser(
+                            userInfo = user,
+                            onSuccess = {
+                                hideProgressDialog()
+
+                                userRegistrationSuccess()
+
+                                logOut()
+                            }
+                        ) {
+                            hideProgressDialog()
+
+                            logOut()
+                        }
                     } else {
+
                         showErrorSnackBar(task.exception?.message.toString(), true)
                     }
                 }
         }
+    }
+
+    private fun logOut() {
+        FirebaseAuth.getInstance().signOut()
+        finish()
     }
 
     private fun setupActionBar() {
@@ -102,5 +129,13 @@ class RegisterActivity : BaseActivity() {
 
             else -> true
         }
+    }
+
+    private fun userRegistrationSuccess() {
+        Toast.makeText(
+            this,
+            resources.getString(R.string.register_success),
+            Toast.LENGTH_LONG
+        ).show()
     }
 }
