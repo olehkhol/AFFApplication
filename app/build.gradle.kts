@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinParcelize)
     // Add the Google services Gradle plugin
     alias(libs.plugins.googleServices)
 }

@@ -78,7 +78,7 @@ class LoginActivity : BaseActivity() {
         Log.i("Email: ", user.email)
 
         if (user.profileCompleted == 0) {
-            startActivityFor<UserProfileActivity>()
+            startActivityFor<UserProfileActivity>(user)
         } else {
             startActivityFor<MainActivity>()
         }
