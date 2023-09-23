@@ -1,6 +1,7 @@
 package sky.tavrov.affapplication.data.firestore
 
 import android.app.Activity
+import android.content.Context
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -54,11 +55,21 @@ class FirestoreClass {
 
                 Log.i(activity.javaClass.simpleName, document.toString())
 
-                val user: User? = document.toObject(User::class.java)
+                val user: User = document.toObject(User::class.java)!!
+                val sharedPreferences = activity.getSharedPreferences(
+                    Constants.MYSHOPPAL_PREFERENCES,
+                    Context.MODE_PRIVATE
+                )
+                val editor = sharedPreferences.edit()
+
+                editor.putString(
+                    Constants.LOGGED_IN_USERNAME,
+                    "${user.firstName} ${user.lastName}"
+                )
 
                 when (activity) {
                     is LoginActivity -> {
-                        user?.let { activity.userLoggedInSuccess(it) }
+                        activity.userLoggedInSuccess(user)
                     }
                 }
             }
