@@ -31,55 +31,35 @@ class RegisterActivity : BaseActivity() {
     }
 
     private fun registerUser() {
-        if (!validateRegisterDetails()) return
 
-        showProgressDialog(resources.getString(R.string.please_wait))
+        if (validateRegisterDetails()) {
 
-        with(binding) {
-            val email = etEmail.text.toString().trimWhitespace()
-            val password = etPassword.text.toString().trimWhitespace()
+            showProgressDialog(resources.getString(R.string.please_wait))
+
+            val email: String = binding.etEmail.text.toString().trimWhitespace()
+            val password: String = binding.etPassword.text.toString().trimWhitespace()
 
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-
                     if (task.isSuccessful) {
+
                         val firebaseUser: FirebaseUser = task.result!!.user!!
                         val user = User(
                             firebaseUser.uid,
-                            etFirstName.text.toString().trimWhitespace(),
-                            etLastName.text.toString().trimWhitespace(),
-                            email
-                        )
-                        showErrorSnackBar(
-                            "You are registered successfully. Your user id is ${user.id}",
-                            false
+                            binding.etFirstName.text.toString().trimWhitespace(),
+                            binding.etLastName.text.toString().trimWhitespace(),
+                            binding.etEmail.text.toString().trimWhitespace()
                         )
 
-                        FirestoreClass().registerUser(
-                            userInfo = user,
-                            onSuccess = {
-                                hideProgressDialog()
-
-                                userRegistrationSuccess()
-
-                                logOut()
-                            }
-                        ) {
-                            hideProgressDialog()
-
-                            logOut()
-                        }
+                        FirestoreClass().registerUser(this@RegisterActivity, user)
                     } else {
 
-                        showErrorSnackBar(task.exception?.message.toString(), true)
+                        hideProgressDialog()
+
+                        showErrorSnackBar(task.exception!!.message.toString(), true)
                     }
                 }
         }
-    }
-
-    private fun logOut() {
-        FirebaseAuth.getInstance().signOut()
-        finish()
     }
 
     private fun setupActionBar() {
@@ -131,11 +111,18 @@ class RegisterActivity : BaseActivity() {
         }
     }
 
-    private fun userRegistrationSuccess() {
+    fun userRegistrationSuccess() {
+
+        hideProgressDialog()
+
         Toast.makeText(
-            this,
+            this@RegisterActivity,
             resources.getString(R.string.register_success),
-            Toast.LENGTH_LONG
+            Toast.LENGTH_SHORT
         ).show()
+
+
+        FirebaseAuth.getInstance().signOut()
+        finish()
     }
 }

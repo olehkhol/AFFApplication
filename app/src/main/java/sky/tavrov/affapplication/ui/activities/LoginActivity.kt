@@ -1,8 +1,11 @@
 package sky.tavrov.affapplication.ui.activities
 
 import android.os.Bundle
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import sky.tavrov.affapplication.R
+import sky.tavrov.affapplication.data.firestore.FirestoreClass
+import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.databinding.ActivityLoginBinding
 import sky.tavrov.affapplication.ui.utils.startActivityFor
 
@@ -40,11 +43,10 @@ class LoginActivity : BaseActivity() {
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
 
-                    hideProgressDialog()
-
                     if (task.isSuccessful) {
-                        showErrorSnackBar("You are logged in successfully.", false)
+                        FirestoreClass().getUserDetails(this@LoginActivity)
                     } else {
+                        hideProgressDialog()
                         showErrorSnackBar(task.exception?.message.toString(), true)
                     }
                 }
@@ -65,5 +67,17 @@ class LoginActivity : BaseActivity() {
         }
 
         return true
+    }
+
+    fun userLoggedInSuccess(user: User) {
+
+        hideProgressDialog()
+
+        Log.i("First Name: ", user.firstName)
+        Log.i("Last Name: ", user.lastName)
+        Log.i("Email: ", user.email)
+
+        startActivityFor<MainActivity>()
+        finish()
     }
 }
