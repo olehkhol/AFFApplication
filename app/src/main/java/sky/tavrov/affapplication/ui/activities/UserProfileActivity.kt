@@ -1,9 +1,13 @@
 package sky.tavrov.affapplication.ui.activities
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -12,6 +16,8 @@ import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.databinding.ActivityUserProfileBinding
 import sky.tavrov.affapplication.ui.utils.Constants
+import sky.tavrov.affapplication.ui.utils.Constants.showImageChooser
+import java.io.IOException
 
 class UserProfileActivity : BaseActivity() {
 
@@ -50,8 +56,12 @@ class UserProfileActivity : BaseActivity() {
                 Manifest.permission.READ_EXTERNAL_STORAGE
             }
 
-            if (ContextCompat.checkSelfPermission(this, permissionToCheck) == PackageManager.PERMISSION_GRANTED) {
-                showErrorSnackBar("You already have the storage permission.", false)
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    permissionToCheck
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                showImageChooser(this@UserProfileActivity)
             } else {
                 ActivityCompat.requestPermissions(
                     this,
@@ -70,7 +80,7 @@ class UserProfileActivity : BaseActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == Constants.READ_STORAGE_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                showErrorSnackBar("The storage permission is granted.", false)
+                showImageChooser(this@UserProfileActivity)
             } else {
                 Toast.makeText(
                     this,
@@ -81,4 +91,27 @@ class UserProfileActivity : BaseActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constants.PICK_IMAGE_REQUEST_CODE) {
+                if (data != null) {
+                    try {
+                        val selectedImageFileUri = data.data!!
+                        binding.ivUserPhoto.setImageURI(Uri.parse(selectedImageFileUri.toString()))
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        Toast.makeText(
+                            this@UserProfileActivity,
+                            resources.getString(R.string.image_selection_failed),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            Log.e("Request cancelled", "Image selection cancelled")
+        }
+    }
 }
