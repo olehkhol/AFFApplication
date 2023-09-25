@@ -1,7 +1,6 @@
 package sky.tavrov.affapplication.ui.activities
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -22,9 +21,9 @@ class DashboardActivity : BaseActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home,
+                R.id.navigation_products,
                 R.id.navigation_dashboard,
-                R.id.navigation_notifications
+                R.id.navigation_orders
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
