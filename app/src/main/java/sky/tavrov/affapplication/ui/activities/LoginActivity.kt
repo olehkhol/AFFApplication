@@ -1,7 +1,6 @@
 package sky.tavrov.affapplication.ui.activities
 
 import android.os.Bundle
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
@@ -75,7 +74,7 @@ class LoginActivity : BaseActivity() {
         if (user.profileCompleted == 0) {
             startActivityFor<UserProfileActivity>(user)
         } else {
-            startActivityFor<MainActivity>()
+            startActivityFor<DashboardActivity>()
         }
 
         finish()
