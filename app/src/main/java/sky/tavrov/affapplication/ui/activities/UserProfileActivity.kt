@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -17,6 +18,7 @@ import sky.tavrov.affapplication.databinding.ActivityUserProfileBinding
 import sky.tavrov.affapplication.ui.utils.Constants
 import sky.tavrov.affapplication.ui.utils.Constants.showImageChooser
 import sky.tavrov.affapplication.ui.utils.GlideLoader
+import sky.tavrov.affapplication.ui.utils.trimWhitespace
 import java.io.IOException
 
 class UserProfileActivity : BaseActivity() {
@@ -43,6 +45,12 @@ class UserProfileActivity : BaseActivity() {
 
             etEmail.isEnabled = false
             etEmail.setText(userDetails.email)
+
+            btnSubmit.setOnClickListener {
+                if (validateUserProfileDetails()) {
+                    showErrorSnackBar("Your details are valid. You can update them.", false)
+                }
+            }
 
             ivUserPhoto.setOnClickListener(uploadPhoto())
         }
@@ -112,6 +120,19 @@ class UserProfileActivity : BaseActivity() {
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
             Log.e("Request cancelled", "Image selection cancelled")
+        }
+    }
+
+    private fun validateUserProfileDetails(): Boolean {
+        return when {
+            TextUtils.isEmpty(binding.etMobileNumber.text.toString().trimWhitespace()) -> {
+                showErrorSnackBar(resources.getString(R.string.err_msg_enter_mobile_number), true)
+                false
+            }
+
+            else -> {
+                true
+            }
         }
     }
 }
