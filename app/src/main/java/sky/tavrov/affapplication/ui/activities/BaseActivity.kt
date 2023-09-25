@@ -1,8 +1,10 @@
 package sky.tavrov.affapplication.ui.activities
 
 import android.os.Build
+import android.os.Handler
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
@@ -11,6 +13,7 @@ import sky.tavrov.affapplication.ui.custom.ProgressDialogWrapper
 
 open class BaseActivity : AppCompatActivity() {
 
+    private var doubleBackToExitPressedOnce = false
     private val progressDialogWrapper by lazy { ProgressDialogWrapper(this) }
 
     fun setFullScreenMode() {
@@ -54,5 +57,21 @@ open class BaseActivity : AppCompatActivity() {
 
     fun hideProgressDialog() {
         progressDialogWrapper.hide()
+    }
+
+    fun doubleBackToExit() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+        doubleBackToExitPressedOnce = true
+
+        Toast.makeText(
+            this@BaseActivity,
+            resources.getString(R.string.please_click_back_again_to_exit),
+            Toast.LENGTH_LONG
+        ).show()
+
+        Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 }

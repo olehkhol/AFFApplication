@@ -10,7 +10,7 @@ import sky.tavrov.affapplication.databinding.FragmentNotificationsBinding
 
 class NotificationsFragment : Fragment() {
 
-    private val viewModel by lazy { ViewModelProvider(this)[NotificationsViewModel::class.java] }
+    //private val viewModel by lazy { ViewModelProvider(this)[NotificationsViewModel::class.java] }
     private val binding by lazy { FragmentNotificationsBinding.inflate(layoutInflater) }
 
     override fun onCreateView(
@@ -18,9 +18,7 @@ class NotificationsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel.text.observe(viewLifecycleOwner) {
-            binding.textNotifications.text = it
-        }
+        binding.textNotifications.text = "This is notifications Fragment"
 
         return binding.root
     }
