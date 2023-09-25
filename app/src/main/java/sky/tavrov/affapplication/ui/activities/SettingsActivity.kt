@@ -1,21 +1,37 @@
 package sky.tavrov.affapplication.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
+import com.google.firebase.auth.FirebaseAuth
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.databinding.ActivitySettingsBinding
+import sky.tavrov.affapplication.ui.utils.Constants
 import sky.tavrov.affapplication.ui.utils.GlideLoader
 
 class SettingsActivity : BaseActivity() {
 
     private val binding by lazy { ActivitySettingsBinding.inflate(layoutInflater) }
+    private lateinit var userDetails: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
         setupActionBar()
+
+        binding.btnLogout.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(this@SettingsActivity, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
+        binding.tvEdit.setOnClickListener {
+            val intent = Intent(this@SettingsActivity, UserProfileActivity::class.java)
+            intent.putExtra(Constants.EXTRA_USER_DETAILS, userDetails)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {
@@ -45,6 +61,8 @@ class SettingsActivity : BaseActivity() {
     }
 
     fun userDetailsSuccess(user: User) {
+        userDetails = user
+
         hideProgressDialog()
 
         with(binding) {

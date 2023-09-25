@@ -35,8 +35,7 @@ class UserProfileActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (intent.hasExtra(Constants.EXTRA_USER_DETAILS)) {
-            userDetails =
-                intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
+            userDetails = intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
         }
 
         with(binding) {
