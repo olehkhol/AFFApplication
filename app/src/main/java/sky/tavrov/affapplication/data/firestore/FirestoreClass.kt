@@ -2,10 +2,13 @@ package sky.tavrov.affapplication.data.firestore
 
 import android.app.Activity
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.ui.activities.LoginActivity
 import sky.tavrov.affapplication.ui.activities.RegisterActivity
@@ -58,7 +61,7 @@ class FirestoreClass {
 
                 val user: User = document.toObject(User::class.java)!!
                 val sharedPreferences = activity.getSharedPreferences(
-                    Constants.MYSHOPPAL_PREFERENCES,
+                    Constants.MY_SHOP_PAL_PREFERENCES,
                     Context.MODE_PRIVATE
                 )
                 val editor = sharedPreferences.edit()
@@ -95,18 +98,55 @@ class FirestoreClass {
             .document(getCurrentUserID())
             .update(userHashMap)
             .addOnSuccessListener {
-                when(activity) {
+                when (activity) {
                     is UserProfileActivity -> {
                         activity.userProfileUpdateSuccess()
                     }
                 }
             }
             .addOnFailureListener {
-                when(activity) {
+                when (activity) {
                     is UserProfileActivity -> {
                         activity.hideProgressDialog()
                     }
                 }
+            }
+    }
+
+    fun uploadImageToCloudStorage(activity: Activity, imageFileUri: Uri?) {
+        val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
+            Constants.USER_PROFILE_IMAGE + System.currentTimeMillis() + "."
+                    + Constants.getFileExtension(activity, imageFileUri)
+        )
+        sRef.putFile(imageFileUri!!)
+            .addOnSuccessListener { taskSnapshot ->
+                Log.e(
+                    "Firebase Image URL:",
+                    taskSnapshot.metadata?.reference?.downloadUrl.toString()
+                )
+
+                taskSnapshot.metadata!!.reference!!.downloadUrl
+                    .addOnSuccessListener { uri ->
+                        Log.e("Downloadable Image URL:", uri.toString())
+                        when (activity) {
+                            is UserProfileActivity -> {
+                                activity.imageUploadSuccess(uri.toString())
+                            }
+                        }
+                    }
+            }
+            .addOnFailureListener { exception ->
+                when (activity) {
+                    is UserProfileActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
+
+                Log.e(
+                    activity.javaClass.simpleName,
+                    exception.message,
+                    exception
+                )
             }
     }
 }

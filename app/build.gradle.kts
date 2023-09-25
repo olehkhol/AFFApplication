@@ -61,6 +61,7 @@ dependencies {
     // https://firebase.google.com/docs/android/setup#available-libraries
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.storage.ktx)
 
     implementation(libs.glide)
 
