@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +16,7 @@ import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.databinding.ActivityUserProfileBinding
 import sky.tavrov.affapplication.ui.utils.Constants
 import sky.tavrov.affapplication.ui.utils.Constants.showImageChooser
+import sky.tavrov.affapplication.ui.utils.GlideLoader
 import java.io.IOException
 
 class UserProfileActivity : BaseActivity() {
@@ -99,7 +99,7 @@ class UserProfileActivity : BaseActivity() {
                 if (data != null) {
                     try {
                         val selectedImageFileUri = data.data!!
-                        binding.ivUserPhoto.setImageURI(Uri.parse(selectedImageFileUri.toString()))
+                        GlideLoader(this).loadUserPicture(selectedImageFileUri, binding.ivUserPhoto)
                     } catch (e: IOException) {
                         e.printStackTrace()
                         Toast.makeText(
