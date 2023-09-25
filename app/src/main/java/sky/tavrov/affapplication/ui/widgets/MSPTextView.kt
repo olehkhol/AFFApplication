@@ -1,4 +1,4 @@
-package sky.tavrov.affapplication.widgets
+package sky.tavrov.affapplication.ui.widgets
 
 import android.content.Context
 import android.graphics.Typeface

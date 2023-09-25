@@ -8,7 +8,7 @@ import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.databinding.ActivityRegisterBinding
-import sky.tavrov.affapplication.ui.utils.trimWhitespace
+import sky.tavrov.affapplication.ui.utils.trimmedText
 
 class RegisterActivity : BaseActivity() {
 
@@ -36,8 +36,8 @@ class RegisterActivity : BaseActivity() {
 
             showProgressDialog(resources.getString(R.string.please_wait))
 
-            val email: String = binding.etEmail.text.toString().trimWhitespace()
-            val password: String = binding.etPassword.text.toString().trimWhitespace()
+            val email: String = binding.etEmail.trimmedText()
+            val password: String = binding.etPassword.trimmedText()
 
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
@@ -46,9 +46,9 @@ class RegisterActivity : BaseActivity() {
                         val firebaseUser: FirebaseUser = task.result!!.user!!
                         val user = User(
                             firebaseUser.uid,
-                            binding.etFirstName.text.toString().trimWhitespace(),
-                            binding.etLastName.text.toString().trimWhitespace(),
-                            binding.etEmail.text.toString().trimWhitespace()
+                            binding.etFirstName.trimmedText(),
+                            binding.etLastName.trimmedText(),
+                            binding.etEmail.trimmedText()
                         )
 
                         FirestoreClass().registerUser(this@RegisterActivity, user)

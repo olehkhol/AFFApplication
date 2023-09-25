@@ -13,22 +13,24 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import sky.tavrov.affapplication.R
+import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.databinding.ActivityUserProfileBinding
 import sky.tavrov.affapplication.ui.utils.Constants
 import sky.tavrov.affapplication.ui.utils.Constants.showImageChooser
 import sky.tavrov.affapplication.ui.utils.GlideLoader
-import sky.tavrov.affapplication.ui.utils.trimWhitespace
+import sky.tavrov.affapplication.ui.utils.startActivityFor
+import sky.tavrov.affapplication.ui.utils.trimmedText
 import java.io.IOException
 
 class UserProfileActivity : BaseActivity() {
 
     private val binding by lazy { ActivityUserProfileBinding.inflate(layoutInflater) }
+    private lateinit var userDetails: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var userDetails: User = User()
         if (intent.hasExtra(Constants.EXTRA_USER_DETAILS)) {
             userDetails =
                 intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
@@ -48,7 +50,17 @@ class UserProfileActivity : BaseActivity() {
 
             btnSubmit.setOnClickListener {
                 if (validateUserProfileDetails()) {
-                    showErrorSnackBar("Your details are valid. You can update them.", false)
+                    val userHashMap = HashMap<String, Any>()
+                    val mobileNumber = etMobileNumber.trimmedText()
+                    val gender = if (rbMale.isChecked) Constants.MALE else Constants.FEMALE
+
+                    if (mobileNumber.isNotEmpty()) {
+                        userHashMap[Constants.MOBILE] = mobileNumber.toLong()
+                    }
+                    userHashMap[Constants.GENDER] = gender
+
+                    showProgressDialog(resources.getString(R.string.please_wait))
+                    FirestoreClass().updateUserProfile(this@UserProfileActivity, userHashMap)
                 }
             }
 
@@ -78,6 +90,19 @@ class UserProfileActivity : BaseActivity() {
                 )
             }
         }
+    }
+
+    fun userProfileUpdateSuccess() {
+        hideProgressDialog()
+
+        Toast.makeText(
+            this@UserProfileActivity,
+            resources.getString(R.string.msg_profile_update_success),
+            Toast.LENGTH_LONG
+        ).show()
+
+        startActivityFor<MainActivity>()
+        finish()
     }
 
     override fun onRequestPermissionsResult(
@@ -125,7 +150,7 @@ class UserProfileActivity : BaseActivity() {
 
     private fun validateUserProfileDetails(): Boolean {
         return when {
-            TextUtils.isEmpty(binding.etMobileNumber.text.toString().trimWhitespace()) -> {
+            TextUtils.isEmpty(binding.etMobileNumber.trimmedText()) -> {
                 showErrorSnackBar(resources.getString(R.string.err_msg_enter_mobile_number), true)
                 false
             }

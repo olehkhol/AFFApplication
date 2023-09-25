@@ -1,11 +1,11 @@
-package sky.tavrov.affapplication.widgets
+package sky.tavrov.affapplication.ui.widgets
 
 import android.content.Context
 import android.graphics.Typeface
 import android.util.AttributeSet
-import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.AppCompatEditText
 
-class MSPTextViewBold(context: Context, attrs: AttributeSet) : AppCompatTextView(context, attrs) {
+class MSPEditText(context: Context, attrs: AttributeSet) : AppCompatEditText(context, attrs) {
 
     init {
         applyFont()

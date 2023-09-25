@@ -9,16 +9,17 @@ import com.google.firebase.firestore.SetOptions
 import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.ui.activities.LoginActivity
 import sky.tavrov.affapplication.ui.activities.RegisterActivity
+import sky.tavrov.affapplication.ui.activities.UserProfileActivity
 import sky.tavrov.affapplication.ui.utils.Constants
 
 class FirestoreClass {
 
     // Access a Cloud Firestore instance.
-    private val mFireStore = FirebaseFirestore.getInstance()
+    private val fireStore = FirebaseFirestore.getInstance()
 
     fun registerUser(activity: RegisterActivity, userInfo: User) {
 
-        mFireStore.collection(Constants.USERS)
+        fireStore.collection(Constants.USERS)
             .document(userInfo.id)
             .set(userInfo, SetOptions.merge())
             .addOnSuccessListener {
@@ -48,7 +49,7 @@ class FirestoreClass {
 
     fun getUserDetails(activity: Activity) {
 
-        mFireStore.collection(Constants.USERS)
+        fireStore.collection(Constants.USERS)
             .document(getCurrentUserID())
             .get()
             .addOnSuccessListener { document ->
@@ -85,6 +86,27 @@ class FirestoreClass {
                     "Error while getting user details.",
                     e
                 )
+            }
+    }
+
+    fun updateUserProfile(activity: Activity, userHashMap: HashMap<String, Any>) {
+
+        fireStore.collection(Constants.USERS)
+            .document(getCurrentUserID())
+            .update(userHashMap)
+            .addOnSuccessListener {
+                when(activity) {
+                    is UserProfileActivity -> {
+                        activity.userProfileUpdateSuccess()
+                    }
+                }
+            }
+            .addOnFailureListener {
+                when(activity) {
+                    is UserProfileActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
             }
     }
 }

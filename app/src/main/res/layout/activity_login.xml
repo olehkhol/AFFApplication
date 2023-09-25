@@ -31,7 +31,7 @@
             app:tint="@color/colorWhite" />
     </FrameLayout>
 
-    <sky.tavrov.affapplication.widgets.MSPTextViewBold
+    <sky.tavrov.affapplication.ui.widgets.MSPTextViewBold
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title">
 
-        <sky.tavrov.affapplication.widgets.MSPEditText
+        <sky.tavrov.affapplication.ui.widgets.MSPEditText
             android:id="@+id/et_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/til_email">
 
-        <sky.tavrov.affapplication.widgets.MSPEditText
+        <sky.tavrov.affapplication.ui.widgets.MSPEditText
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
             tools:text="123456" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <sky.tavrov.affapplication.widgets.MSPTextViewBold
+    <sky.tavrov.affapplication.ui.widgets.MSPTextViewBold
         android:id="@+id/tv_forgot_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/til_password" />
 
-    <sky.tavrov.affapplication.widgets.MSPButton
+    <sky.tavrov.affapplication.ui.widgets.MSPButton
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_login">
 
-        <sky.tavrov.affapplication.widgets.MSPTextView
+        <sky.tavrov.affapplication.ui.widgets.MSPTextView
             android:id="@+id/tv_don_t_have_an_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
             android:textColor="@color/colorSecondaryText"
             android:textSize="@dimen/lbl_text_view_textSize" />
 
-        <sky.tavrov.affapplication.widgets.MSPTextViewBold
+        <sky.tavrov.affapplication.ui.widgets.MSPTextViewBold
             android:id="@+id/tv_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
