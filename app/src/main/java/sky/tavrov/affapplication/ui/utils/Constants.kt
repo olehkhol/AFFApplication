@@ -14,9 +14,11 @@ object Constants {
     const val READ_STORAGE_PERMISSION_CODE: Int = 2
     const val PICK_IMAGE_REQUEST_CODE: Int = 1
 
+    const val EMAIL: String = "email"
+    const val FIRST_NAME: String = "firstName"
+    const val LAST_NAME: String = "lastName"
     const val MALE: String = "male"
     const val FEMALE: String = "female"
-
     const val MOBILE: String = "mobile"
     const val GENDER: String = "gender"
     const val IMAGE: String = "image"

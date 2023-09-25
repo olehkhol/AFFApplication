@@ -17,20 +17,24 @@ class SettingsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        setupActionBar()
 
-        binding.btnLogout.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            val intent = Intent(this@SettingsActivity, LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
-        }
-        binding.tvEdit.setOnClickListener {
-            val intent = Intent(this@SettingsActivity, UserProfileActivity::class.java)
-            intent.putExtra(Constants.EXTRA_USER_DETAILS, userDetails)
-            startActivity(intent)
+        with(binding) {
+            setContentView(root)
+
+            setupActionBar()
+
+            btnLogout.setOnClickListener {
+                FirebaseAuth.getInstance().signOut()
+                val intent = Intent(this@SettingsActivity, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }
+            tvEdit.setOnClickListener {
+                val intent = Intent(this@SettingsActivity, UserProfileActivity::class.java)
+                intent.putExtra(Constants.EXTRA_USER_DETAILS, userDetails)
+                startActivity(intent)
+            }
         }
     }
 

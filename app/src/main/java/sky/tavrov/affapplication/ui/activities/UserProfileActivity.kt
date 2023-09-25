@@ -34,21 +34,42 @@ class UserProfileActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (intent.hasExtra(Constants.EXTRA_USER_DETAILS)) {
-            userDetails = intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
-        }
-
         with(binding) {
             setContentView(root)
 
-            etFirstName.isEnabled = false
-            etFirstName.setText(userDetails.firstName)
+            if (intent.hasExtra(Constants.EXTRA_USER_DETAILS)) {
+                userDetails = intent.getParcelableExtra(Constants.EXTRA_USER_DETAILS)!!
+            }
 
-            etLastName.isEnabled = false
-            etLastName.setText(userDetails.lastName)
+            if (userDetails.profileCompleted == 0) {
+                tvTitle.text = resources.getString(R.string.title_complete_profile)
+                etFirstName.isEnabled = false
+                etFirstName.setText(userDetails.firstName)
+                etLastName.isEnabled = false
+                etLastName.setText(userDetails.lastName)
+                etEmail.isEnabled = false
+                etEmail.setText(userDetails.email)
+            } else {
+                setupActionBar()
 
-            etEmail.isEnabled = false
-            etEmail.setText(userDetails.email)
+                tvTitle.text = resources.getString(R.string.title_edit_profile)
+                GlideLoader(this@UserProfileActivity).loadUserPicture(
+                    userDetails.image,
+                    ivUserPhoto
+                )
+                etFirstName.setText(userDetails.firstName)
+                etLastName.setText(userDetails.lastName)
+                etEmail.isEnabled = false
+                etEmail.setText(userDetails.email)
+                if (userDetails.mobile != 0L) {
+                    etMobileNumber.setText(userDetails.mobile.toString())
+                }
+                if (userDetails.gender == Constants.MALE) {
+                    rbMale.isChecked = true
+                } else {
+                    rbFemale.isChecked = true
+                }
+            }
 
             btnSubmit.setOnClickListener {
                 if (validateUserProfileDetails()) {
@@ -69,18 +90,43 @@ class UserProfileActivity : BaseActivity() {
         }
     }
 
+    private fun setupActionBar() {
+        setSupportActionBar(binding.toolbarUserProfileActivity)
+
+        val actionBar = supportActionBar
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+        }
+
+        binding.toolbarUserProfileActivity.setNavigationOnClickListener {
+            onBackPressed()
+        }
+    }
+
     private fun updateUserProfileDetails() {
         val userHashMap = HashMap<String, Any>()
+        val email = binding.etEmail.trimmedText()
+        val firstName = binding.etFirstName.trimmedText()
+        val lastName = binding.etLastName.trimmedText()
         val mobileNumber = binding.etMobileNumber.trimmedText()
         val gender = if (binding.rbMale.isChecked) Constants.MALE else Constants.FEMALE
 
+        if (firstName != userDetails.firstName) {
+            userHashMap[Constants.FIRST_NAME] = firstName
+        }
+        if (lastName != userDetails.lastName) {
+            userHashMap[Constants.LAST_NAME] = lastName
+        }
         if (userProfileImageURL.isNotEmpty()) {
             userHashMap[Constants.IMAGE] = userProfileImageURL
         }
-        if (mobileNumber.isNotEmpty()) {
+        if (mobileNumber.isNotEmpty() && mobileNumber != userDetails.mobile.toString()) {
             userHashMap[Constants.MOBILE] = mobileNumber.toLong()
         }
-        userHashMap[Constants.GENDER] = gender
+        if (gender.isNotEmpty() && gender != userDetails.gender) {
+            userHashMap[Constants.GENDER] = gender
+        }
         userHashMap[Constants.COMPLETE_PROFILE] = 1
 
         FirestoreClass().updateUserProfile(this@UserProfileActivity, userHashMap)
@@ -119,7 +165,7 @@ class UserProfileActivity : BaseActivity() {
             Toast.LENGTH_LONG
         ).show()
 
-        startActivityFor<MainActivity>()
+        startActivityFor<DashboardActivity>()
         finish()
     }
 
