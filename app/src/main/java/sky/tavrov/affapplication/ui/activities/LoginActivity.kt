@@ -70,12 +70,7 @@ class LoginActivity : BaseActivity() {
     }
 
     fun userLoggedInSuccess(user: User) {
-
         hideProgressDialog()
-
-        Log.i("First Name: ", user.firstName)
-        Log.i("Last Name: ", user.lastName)
-        Log.i("Email: ", user.email)
 
         if (user.profileCompleted == 0) {
             startActivityFor<UserProfileActivity>(user)
