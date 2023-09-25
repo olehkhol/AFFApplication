@@ -12,6 +12,7 @@ import com.google.firebase.storage.StorageReference
 import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.ui.activities.LoginActivity
 import sky.tavrov.affapplication.ui.activities.RegisterActivity
+import sky.tavrov.affapplication.ui.activities.SettingsActivity
 import sky.tavrov.affapplication.ui.activities.UserProfileActivity
 import sky.tavrov.affapplication.ui.utils.Constants
 
@@ -65,21 +66,27 @@ class FirestoreClass {
                     Context.MODE_PRIVATE
                 )
                 val editor = sharedPreferences.edit()
-
                 editor.putString(
                     Constants.LOGGED_IN_USERNAME,
                     "${user.firstName} ${user.lastName}"
                 )
+                editor.apply()
 
                 when (activity) {
                     is LoginActivity -> {
                         activity.userLoggedInSuccess(user)
+                    }
+                    is SettingsActivity -> {
+                        activity.userDetailsSuccess(user)
                     }
                 }
             }
             .addOnFailureListener { e ->
                 when (activity) {
                     is LoginActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is SettingsActivity -> {
                         activity.hideProgressDialog()
                     }
                 }
