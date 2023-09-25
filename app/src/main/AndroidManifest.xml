@@ -17,6 +17,9 @@
         android:theme="@style/Theme.AFFApplication"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.SettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.UserProfileActivity"
             android:exported="false" />
         <activity
@@ -48,4 +51,5 @@
             android:exported="false"
             android:theme="@style/Theme.AFFApplicationWithActionBar" />
     </application>
+
 </manifest>

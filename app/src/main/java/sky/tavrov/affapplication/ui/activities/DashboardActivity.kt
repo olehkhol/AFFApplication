@@ -1,6 +1,7 @@
 package sky.tavrov.affapplication.ui.activities
 
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -16,6 +17,13 @@ class DashboardActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        supportActionBar?.setBackgroundDrawable(
+            ContextCompat.getDrawable(
+                this@DashboardActivity,
+                R.drawable.app_gradient_color_background
+            )
+        )
 
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment)

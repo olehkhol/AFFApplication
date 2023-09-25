@@ -3,19 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_products">
-
-    <fragment
-        android:id="@+id/navigation_products"
-        android:name="sky.tavrov.affapplication.ui.fragments.home.ProductsFragment"
-        android:label="@string/title_products"
-        tools:layout="@layout/fragment_products" />
+    app:startDestination="@+id/navigation_dashboard">
 
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="sky.tavrov.affapplication.ui.fragments.dashboards.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_products"
+        android:name="sky.tavrov.affapplication.ui.fragments.home.ProductsFragment"
+        android:label="@string/title_products"
+        tools:layout="@layout/fragment_products" />
 
     <fragment
         android:id="@+id/navigation_orders"
