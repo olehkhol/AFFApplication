@@ -1,12 +1,15 @@
 package sky.tavrov.affapplication.ui.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import sky.tavrov.affapplication.R
+import androidx.appcompat.app.AppCompatActivity
+import sky.tavrov.affapplication.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
+
+    private val binding by lazy { ActivitySettingsBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        setContentView(binding.root)
     }
 }
