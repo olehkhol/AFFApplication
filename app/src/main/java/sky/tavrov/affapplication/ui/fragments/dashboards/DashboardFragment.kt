@@ -2,18 +2,21 @@ package sky.tavrov.affapplication.ui.fragments.dashboards
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import sky.tavrov.affapplication.R
+import sky.tavrov.affapplication.data.firestore.FirestoreClass
+import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.databinding.FragmentDashboardBinding
 import sky.tavrov.affapplication.ui.activities.SettingsActivity
+import sky.tavrov.affapplication.ui.fragments.BaseFragment
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : BaseFragment() {
 
     //private val viewModel by lazy { ViewModelProvider(this)[DashboardViewModel::class.java] }
     private val binding by lazy { FragmentDashboardBinding.inflate(layoutInflater) }
@@ -24,13 +27,17 @@ class DashboardFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        getDashboardItemsList()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding.textDashboard.text = "This is dashboard Fragment"
-
         return binding.root
     }
 
@@ -48,5 +55,19 @@ class DashboardFragment : Fragment() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    fun successDashboardItemsList(dashboardItemsList: ArrayList<Product>) {
+        hideProgressDialog()
+
+        for (i in dashboardItemsList) {
+            Log.i("Item Title", i.title)
+        }
+    }
+
+    private fun getDashboardItemsList() {
+        showProgressDialog(resources.getString(R.string.please_wait))
+
+        FirestoreClass().getDashboardItemsList(this@DashboardFragment)
     }
 }

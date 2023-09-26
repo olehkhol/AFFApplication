@@ -17,6 +17,7 @@ import sky.tavrov.affapplication.ui.activities.LoginActivity
 import sky.tavrov.affapplication.ui.activities.RegisterActivity
 import sky.tavrov.affapplication.ui.activities.SettingsActivity
 import sky.tavrov.affapplication.ui.activities.UserProfileActivity
+import sky.tavrov.affapplication.ui.fragments.dashboards.DashboardFragment
 import sky.tavrov.affapplication.ui.fragments.products.ProductsFragment
 import sky.tavrov.affapplication.ui.utils.Constants
 
@@ -261,6 +262,28 @@ class FirestoreClass {
                     }
                 }
                 Log.e("Get Product List", "Error while getting product list.", e)
+            }
+    }
+
+    fun getDashboardItemsList(fragment: DashboardFragment) {
+        fireStore.collection(Constants.PRODUCTS)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(fragment.javaClass.simpleName, document.documents.toString())
+
+                val productsList: ArrayList<Product> = ArrayList()
+
+                for (i in document.documents) {
+                    val product = i.toObject(Product::class.java)!!
+                    product.product_id = i.id
+                    productsList.add(product)
+                }
+
+                fragment.successDashboardItemsList(productsList)
+            }
+            .addOnFailureListener { e ->
+                fragment.hideProgressDialog()
+                Log.e(fragment.javaClass.simpleName, "Error while getting dashboard items list.", e)
             }
     }
 }
