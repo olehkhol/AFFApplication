@@ -1,4 +1,4 @@
-package sky.tavrov.affapplication.ui.fragments.notifications
+package sky.tavrov.affapplication.ui.fragments.orders
 
 import android.os.Bundle
 import android.view.LayoutInflater

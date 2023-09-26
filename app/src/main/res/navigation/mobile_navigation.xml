@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/navigation_products"
-        android:name="sky.tavrov.affapplication.ui.fragments.home.ProductsFragment"
+        android:name="sky.tavrov.affapplication.ui.fragments.products.ProductsFragment"
         android:label="@string/title_products"
         tools:layout="@layout/fragment_products" />
 
     <fragment
         android:id="@+id/navigation_orders"
-        android:name="sky.tavrov.affapplication.ui.fragments.notifications.OrdersFragment"
+        android:name="sky.tavrov.affapplication.ui.fragments.orders.OrdersFragment"
         android:label="@string/title_orders"
         tools:layout="@layout/fragment_orders" />
 </navigation>
