@@ -24,14 +24,14 @@ open class MyProductsListAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val product = list[position]
+        val model = list[position]
 
         with(holder.binding) {
-            GlideLoader(context).loadProductPicture(product.image, ivItemImage)
-            tvItemName.text = product.title
-            tvItemPrice.text = "$${product.price}"
+            GlideLoader(context).loadProductPicture(model.image, ivItemImage)
+            tvItemName.text = model.title
+            tvItemPrice.text = "$${model.price}"
             ibDeleteProduct.setOnClickListener {
-                fragment.deleteProduct(product.product_id)
+                fragment.deleteProduct(model.product_id)
             }
         }
     }

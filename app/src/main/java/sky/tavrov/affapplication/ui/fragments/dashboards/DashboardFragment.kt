@@ -2,18 +2,19 @@ package sky.tavrov.affapplication.ui.fragments.dashboards
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.databinding.FragmentDashboardBinding
 import sky.tavrov.affapplication.ui.activities.SettingsActivity
+import sky.tavrov.affapplication.ui.adapters.DashboardItemsListAdapter
 import sky.tavrov.affapplication.ui.fragments.BaseFragment
 
 class DashboardFragment : BaseFragment() {
@@ -60,8 +61,19 @@ class DashboardFragment : BaseFragment() {
     fun successDashboardItemsList(dashboardItemsList: ArrayList<Product>) {
         hideProgressDialog()
 
-        for (i in dashboardItemsList) {
-            Log.i("Item Title", i.title)
+        with(binding) {
+            if (dashboardItemsList.isNotEmpty()) {
+                rvDashboardItems.apply {
+                    visibility = View.VISIBLE
+                    layoutManager = GridLayoutManager(activity, 2)
+                    setHasFixedSize(true)
+                    adapter = DashboardItemsListAdapter(requireContext(), dashboardItemsList)
+                }
+                tvNoDashboardItemsFound.visibility = View.GONE
+            } else {
+                rvDashboardItems.visibility = View.GONE
+                tvNoDashboardItemsFound.visibility = View.VISIBLE
+            }
         }
     }
 
