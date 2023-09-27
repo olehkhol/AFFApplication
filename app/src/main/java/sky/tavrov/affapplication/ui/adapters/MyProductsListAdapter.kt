@@ -1,11 +1,13 @@
 package sky.tavrov.affapplication.ui.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.databinding.ItemListLayoutBinding
+import sky.tavrov.affapplication.ui.activities.ProductDetailsActivity
 import sky.tavrov.affapplication.ui.fragments.products.ProductsFragment
 import sky.tavrov.affapplication.ui.utils.GlideLoader
 
@@ -32,6 +34,10 @@ open class MyProductsListAdapter(
             tvItemPrice.text = "$${model.price}"
             ibDeleteProduct.setOnClickListener {
                 fragment.deleteProduct(model.product_id)
+            }
+            holder.itemView.setOnClickListener {
+                val intent = Intent(context, ProductDetailsActivity::class.java)
+                context.startActivity(intent)
             }
         }
     }

@@ -69,19 +69,23 @@ class ProductsFragment : BaseFragment() {
     fun successProductsListFromFireStore(productsList: ArrayList<Product>) {
         hideProgressDialog()
 
-        if (productsList.size > 0) {
-            binding.rvMyProductItems.visibility = View.VISIBLE
-            binding.tvNoProductsFound.visibility = View.GONE
-
-            binding.rvMyProductItems.layoutManager = LinearLayoutManager(activity)
-            binding.rvMyProductItems.setHasFixedSize(true)
-
-            val adapterProducts =
-                MyProductsListAdapter(requireActivity(), productsList, this@ProductsFragment)
-            binding.rvMyProductItems.adapter = adapterProducts
-        } else {
-            binding.rvMyProductItems.visibility = View.GONE
-            binding.rvMyProductItems.visibility = View.VISIBLE
+        with(binding) {
+            if (productsList.isNotEmpty()) {
+                rvMyProductItems.apply {
+                    visibility = View.VISIBLE
+                    layoutManager = LinearLayoutManager(activity)
+                    setHasFixedSize(true)
+                    adapter = MyProductsListAdapter(
+                        requireActivity(),
+                        productsList,
+                        this@ProductsFragment
+                    )
+                }
+                tvNoProductsFound.visibility = View.GONE
+            } else {
+                rvMyProductItems.visibility = View.GONE
+                tvNoProductsFound.visibility = View.VISIBLE
+            }
         }
     }
 
