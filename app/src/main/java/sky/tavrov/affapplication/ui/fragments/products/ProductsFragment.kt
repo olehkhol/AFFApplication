@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
@@ -85,10 +86,39 @@ class ProductsFragment : BaseFragment() {
     }
 
     fun deleteProduct(productId: String) {
+        showAlertDialogToDeleteProduct(productId)
+    }
+
+    fun productDeleteSuccess() {
+        hideProgressDialog()
+
         Toast.makeText(
             requireActivity(),
-            "You can now delete the product. $productId",
-            Toast.LENGTH_SHORT
+            resources.getString(R.string.product_delete_success_message),
+            Toast.LENGTH_LONG
         ).show()
+
+        getProductListFromFireStore()
+    }
+
+    private fun showAlertDialogToDeleteProduct(productId: String) {
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle(resources.getString(R.string.delete_dialog_title))
+            setMessage(resources.getString(R.string.delete_dialog_message))
+            setIcon(android.R.drawable.ic_dialog_alert)
+            setPositiveButton(resources.getString(R.string.yes)) { dialogInterface, _ ->
+                showProgressDialog(resources.getString(R.string.please_wait))
+                FirestoreClass().deleteProduct(this@ProductsFragment, productId)
+                dialogInterface.dismiss()
+            }
+            setNegativeButton(resources.getString(R.string.no)) { dialogInterface, _ ->
+                dialogInterface.dismiss()
+            }
+            create().apply {
+                setCancelable(false)
+                setCanceledOnTouchOutside(false)
+                show()
+            }
+        }
     }
 }
