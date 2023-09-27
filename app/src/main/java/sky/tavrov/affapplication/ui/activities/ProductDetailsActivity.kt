@@ -3,8 +3,11 @@ package sky.tavrov.affapplication.ui.activities
 import android.os.Bundle
 import android.util.Log
 import sky.tavrov.affapplication.R
+import sky.tavrov.affapplication.data.firestore.FirestoreClass
+import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.databinding.ActivityProductDetailsBinding
 import sky.tavrov.affapplication.ui.utils.Constants
+import sky.tavrov.affapplication.ui.utils.GlideLoader
 
 class ProductDetailsActivity : BaseActivity() {
 
@@ -23,6 +26,8 @@ class ProductDetailsActivity : BaseActivity() {
                 productId = intent.getStringExtra(Constants.EXTRA_PRODUCT_ID)!!
                 Log.i("Product Id:", productId)
             }
+
+            getProductDetails()
         }
     }
 
@@ -36,5 +41,25 @@ class ProductDetailsActivity : BaseActivity() {
         }
 
         binding.toolbarProductDetailsActivity.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    fun getProductDetails() {
+        showProgressDialog(resources.getString(R.string.please_wait))
+
+        FirestoreClass().getProductDetails(this@ProductDetailsActivity, productId)
+    }
+
+    fun productDetailsSuccess(product: Product) {
+        hideProgressDialog()
+
+        GlideLoader(this@ProductDetailsActivity).loadProductPicture(
+            product.image,
+            binding.ivProductDetailImage
+        )
+        binding.tvProductDetailsTitle.text = product.title
+        binding.tvProductDetailsPrice.text = "$${product.price}"
+        binding.tvProductDetailsDescription.text = product.description
+        binding.tvProductDetailsAvailableQuantity.text = product.stock_quantity
+
     }
 }

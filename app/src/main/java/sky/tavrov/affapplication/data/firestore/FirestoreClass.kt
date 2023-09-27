@@ -14,6 +14,7 @@ import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.ui.activities.AddProductActivity
 import sky.tavrov.affapplication.ui.activities.LoginActivity
+import sky.tavrov.affapplication.ui.activities.ProductDetailsActivity
 import sky.tavrov.affapplication.ui.activities.RegisterActivity
 import sky.tavrov.affapplication.ui.activities.SettingsActivity
 import sky.tavrov.affapplication.ui.activities.UserProfileActivity
@@ -302,6 +303,21 @@ class FirestoreClass {
                     "Error while deleting the product.",
                     e
                 )
+            }
+    }
+
+    fun getProductDetails(activity: ProductDetailsActivity, productId: String) {
+        fireStore.collection(Constants.PRODUCTS)
+            .document(productId)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(activity.javaClass.simpleName, document.toString())
+                val product = document.toObject(Product::class.java)!!
+                activity.productDetailsSuccess(product)
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while getting the product details.", e)
             }
     }
 }
