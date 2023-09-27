@@ -9,6 +9,7 @@ import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.databinding.ItemListLayoutBinding
 import sky.tavrov.affapplication.ui.activities.ProductDetailsActivity
 import sky.tavrov.affapplication.ui.fragments.products.ProductsFragment
+import sky.tavrov.affapplication.ui.utils.Constants
 import sky.tavrov.affapplication.ui.utils.GlideLoader
 
 open class MyProductsListAdapter(
@@ -37,6 +38,7 @@ open class MyProductsListAdapter(
             }
             holder.itemView.setOnClickListener {
                 val intent = Intent(context, ProductDetailsActivity::class.java)
+                intent.putExtra(Constants.EXTRA_PRODUCT_ID, model.product_id)
                 context.startActivity(intent)
             }
         }
