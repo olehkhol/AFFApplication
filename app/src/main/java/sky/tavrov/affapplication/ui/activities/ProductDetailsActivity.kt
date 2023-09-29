@@ -2,6 +2,7 @@ package sky.tavrov.affapplication.ui.activities
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.Product
@@ -13,6 +14,7 @@ class ProductDetailsActivity : BaseActivity() {
 
     private val binding by lazy { ActivityProductDetailsBinding.inflate(layoutInflater) }
     private var productId: String = ""
+    private var productOwnerId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,13 @@ class ProductDetailsActivity : BaseActivity() {
                 productId = intent.getStringExtra(Constants.EXTRA_PRODUCT_ID)!!
                 Log.i("Product Id:", productId)
             }
+            if (intent.hasExtra(Constants.EXTRA_USER_DETAILS)) {
+                productOwnerId = intent.getStringExtra(Constants.EXTRA_USER_DETAILS)!!
+                Log.i("Owner Id:", productOwnerId)
+            }
+
+            btnAddToCart.visibility =
+                if (FirestoreClass().getCurrentUserID() == productOwnerId) View.GONE else View.VISIBLE
 
             getProductDetails()
         }
