@@ -13,9 +13,11 @@ import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.databinding.FragmentDashboardBinding
+import sky.tavrov.affapplication.ui.activities.ProductDetailsActivity
 import sky.tavrov.affapplication.ui.activities.SettingsActivity
 import sky.tavrov.affapplication.ui.adapters.DashboardItemsListAdapter
 import sky.tavrov.affapplication.ui.fragments.BaseFragment
+import sky.tavrov.affapplication.ui.utils.Constants
 
 class DashboardFragment : BaseFragment() {
 
@@ -67,7 +69,17 @@ class DashboardFragment : BaseFragment() {
                     visibility = View.VISIBLE
                     layoutManager = GridLayoutManager(activity, 2)
                     setHasFixedSize(true)
-                    adapter = DashboardItemsListAdapter(requireContext(), dashboardItemsList)
+                    val listAdapter =
+                        DashboardItemsListAdapter(requireContext(), dashboardItemsList)
+                    listAdapter.setOnClickListener(object :
+                        DashboardItemsListAdapter.OnClickListener {
+                        override fun onClick(position: Int, product: Product) {
+                            val intent = Intent(context, ProductDetailsActivity::class.java)
+                            intent.putExtra(Constants.EXTRA_PRODUCT_ID, product.product_id)
+                            startActivity(intent)
+                        }
+                    })
+                    adapter = listAdapter
                 }
                 tvNoDashboardItemsFound.visibility = View.GONE
             } else {
