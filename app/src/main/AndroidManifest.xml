@@ -17,6 +17,9 @@
         android:theme="@style/Theme.AFFApplication"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.CartListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.ProductDetailsActivity"
             android:exported="false" />
         <activity

@@ -13,6 +13,7 @@ import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.databinding.FragmentDashboardBinding
+import sky.tavrov.affapplication.ui.activities.CartListActivity
 import sky.tavrov.affapplication.ui.activities.ProductDetailsActivity
 import sky.tavrov.affapplication.ui.activities.SettingsActivity
 import sky.tavrov.affapplication.ui.adapters.DashboardItemsListAdapter
@@ -53,6 +54,10 @@ class DashboardFragment : BaseFragment() {
         when (item.itemId) {
             R.id.action_settings -> {
                 startActivity(Intent(activity, SettingsActivity::class.java))
+                return true
+            }
+            R.id.action_cart -> {
+                startActivity(Intent(activity, CartListActivity::class.java))
                 return true
             }
         }
