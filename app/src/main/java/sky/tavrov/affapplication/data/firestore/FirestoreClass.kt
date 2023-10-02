@@ -14,6 +14,7 @@ import sky.tavrov.affapplication.data.models.CartItem
 import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.ui.activities.AddProductActivity
+import sky.tavrov.affapplication.ui.activities.CartListActivity
 import sky.tavrov.affapplication.ui.activities.LoginActivity
 import sky.tavrov.affapplication.ui.activities.ProductDetailsActivity
 import sky.tavrov.affapplication.ui.activities.RegisterActivity
@@ -361,6 +362,38 @@ class FirestoreClass {
                     "Error while checking the existing cart list.",
                     e
                 )
+            }
+    }
+
+    fun getCartList(activity: Activity) {
+        fireStore.collection(Constants.CART_ITEMS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+                val list: ArrayList<CartItem> = ArrayList()
+
+                for (i in document.documents) {
+                    val cartItem = i.toObject(CartItem::class.java)!!
+                    cartItem.id = i.id
+
+                    list.add(cartItem)
+                }
+
+                when (activity) {
+                    is CartListActivity -> {
+                        activity.successCartItemsList(list)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                when (activity) {
+                    is CartListActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
+
+                Log.e(activity.javaClass.simpleName, "Error while getting the cart list items", e)
             }
     }
 }

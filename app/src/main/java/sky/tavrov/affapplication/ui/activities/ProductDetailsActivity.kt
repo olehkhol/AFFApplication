@@ -39,12 +39,15 @@ class ProductDetailsActivity : BaseActivity() {
 
             btnAddToCart.visibility =
                 if (FirestoreClass().getCurrentUserID() == productOwnerId) View.GONE else View.VISIBLE
-
-            getProductDetails()
-
             btnAddToCart.setOnClickListener { addToCart() }
             btnGoToCart.setOnClickListener { goToCart() }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        getProductDetails()
     }
 
     private fun goToCart() {
@@ -114,8 +117,6 @@ class ProductDetailsActivity : BaseActivity() {
         } else {
             FirestoreClass().checkIfItemExistInCart(this, productId)
         }
-
-
     }
 
     fun productExistsInCart() {
