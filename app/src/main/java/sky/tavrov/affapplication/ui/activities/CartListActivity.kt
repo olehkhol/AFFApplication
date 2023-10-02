@@ -104,6 +104,12 @@ class CartListActivity : BaseActivity() {
         FirestoreClass().getCartList(this@CartListActivity)
     }
 
+    fun itemUpdateSuccess() {
+        hideProgressDialog()
+
+        getCartItemsList()
+    }
+
     private fun setupActionBar(toolbar: Toolbar) {
         setSupportActionBar(toolbar)
         supportActionBar?.apply {

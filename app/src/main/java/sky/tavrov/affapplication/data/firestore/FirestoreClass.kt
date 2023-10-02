@@ -340,6 +340,32 @@ class FirestoreClass {
             }
     }
 
+    fun updateMyCart(context: Context, cartId: String, itemHashMap: HashMap<String, Any>) {
+        fireStore.collection(Constants.CART_ITEMS)
+            .document(cartId)
+            .update(itemHashMap)
+            .addOnSuccessListener {
+                when(context) {
+                    is CartListActivity -> {
+                        context.itemUpdateSuccess()
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                when (context) {
+                    is CartListActivity -> {
+                        context.hideProgressDialog()
+                    }
+                }
+
+                Log.e(
+                    context.javaClass.simpleName,
+                    "Error while updating the cart item.",
+                    e
+                )
+            }
+    }
+
     fun checkIfItemExistInCart(activity: ProductDetailsActivity, productId: String) {
         fireStore.collection(Constants.CART_ITEMS)
             .whereEqualTo(Constants.USER_ID, getCurrentUserID())
@@ -424,14 +450,14 @@ class FirestoreClass {
             .document(cartId)
             .delete()
             .addOnSuccessListener {
-                when(context) {
+                when (context) {
                     is CartListActivity -> {
                         context.itemRemovedSuccess()
                     }
                 }
             }
-            .addOnFailureListener {  e ->
-                when(context) {
+            .addOnFailureListener { e ->
+                when (context) {
                     is CartListActivity -> {
                         context.hideProgressDialog()
                     }
