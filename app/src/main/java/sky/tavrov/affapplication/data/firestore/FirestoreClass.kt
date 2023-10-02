@@ -396,4 +396,51 @@ class FirestoreClass {
                 Log.e(activity.javaClass.simpleName, "Error while getting the cart list items", e)
             }
     }
+
+    fun getAllProductsList(activity: CartListActivity) {
+        fireStore.collection(Constants.PRODUCTS)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e("Product List", document.documents.toString())
+                val productList: ArrayList<Product> = ArrayList()
+                for (i in document.documents) {
+                    val product = i.toObject(Product::class.java)
+                    product!!.product_id = i.id
+
+                    productList.add(product)
+                }
+
+                activity.successProductListFromFireStore(productList)
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+
+                Log.e("Get Product List", "Error while getting all product list.", e)
+            }
+    }
+
+    fun removeItemFromCart(context: Context, cartId: String) {
+        fireStore.collection(Constants.CART_ITEMS)
+            .document(cartId)
+            .delete()
+            .addOnSuccessListener {
+                when(context) {
+                    is CartListActivity -> {
+                        context.itemRemovedSuccess()
+                    }
+                }
+            }
+            .addOnFailureListener {  e ->
+                when(context) {
+                    is CartListActivity -> {
+                        context.hideProgressDialog()
+                    }
+                }
+                Log.e(
+                    context.javaClass.simpleName,
+                    "Error while removing the item from the cart list.",
+                    e
+                )
+            }
+    }
 }

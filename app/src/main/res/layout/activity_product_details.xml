@@ -131,7 +131,7 @@
                 <sky.tavrov.affapplication.ui.widgets.MSPTextView
                     android:id="@+id/tv_product_details_stock_quantity"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@drawable/item_grey_border_background"
                     android:paddingStart="@dimen/product_details_stock_quantity_paddingStartEnd"
                     android:paddingTop="@dimen/product_details_stock_quantity_paddingTopBottom"

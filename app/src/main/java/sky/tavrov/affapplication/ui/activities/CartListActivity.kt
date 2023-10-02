@@ -1,20 +1,22 @@
 package sky.tavrov.affapplication.ui.activities
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.appcompat.widget.LinearLayoutCompat
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.CartItem
+import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.databinding.ActivityCartListBinding
 import sky.tavrov.affapplication.ui.adapters.CartItemsListAdapter
 
 class CartListActivity : BaseActivity() {
 
     private val binding by lazy { ActivityCartListBinding.inflate(layoutInflater) }
+    private lateinit var productsList: ArrayList<Product>
+    private lateinit var cartListItems: ArrayList<CartItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,14 +31,29 @@ class CartListActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
 
-        getCartItemsList()
+        getProductList()
     }
 
-    fun successCartItemsList(cartList: List<CartItem>) {
+    fun successCartItemsList(cartList: ArrayList<CartItem>) {
         hideProgressDialog()
 
+        for (product in productsList) {
+            for (cartItem in cartList) {
+                if (product.product_id == cartItem.product_id) {
+
+                    cartItem.stock_quantity = product.stock_quantity
+
+                    if (product.stock_quantity.toInt() == 0) {
+                        cartItem.cart_quantity = product.stock_quantity
+                    }
+                }
+            }
+        }
+
+        cartListItems = cartList
+
         with(binding) {
-            if (cartList.isNotEmpty()) {
+            if (cartListItems.isNotEmpty()) {
                 rvCartItemsList.visibility = View.VISIBLE
                 llCheckout.visibility = View.VISIBLE
                 tvNoCartItemFound.visibility = View.GONE
@@ -47,9 +64,13 @@ class CartListActivity : BaseActivity() {
                 rvCartItemsList.adapter = cartListAdapter
                 var subTotal = 0.0
                 for (item in cartList) {
-                    val price = item.price.toDouble()
-                    val quantity = item.cart_quantity.toInt()
-                    subTotal += (price * quantity)
+                    val availableQuantity = item.cart_quantity.toInt()
+                    if (availableQuantity > 0) {
+                        val price = item.price.toDouble()
+                        val quantity = item.cart_quantity.toInt()
+
+                        subTotal += (price * quantity)
+                    }
                 }
                 tvSubTotal.text = "$$subTotal"
                 tvShippingCharge.text = "$10.0"
@@ -67,8 +88,19 @@ class CartListActivity : BaseActivity() {
         }
     }
 
-    private fun getCartItemsList() {
+    fun successProductListFromFireStore(productsList: ArrayList<Product>) {
+        hideProgressDialog()
+        this.productsList = productsList
+
+        getCartItemsList()
+    }
+
+    private fun getProductList() {
         showProgressDialog(resources.getString(R.string.please_wait))
+        FirestoreClass().getAllProductsList(this@CartListActivity)
+    }
+
+    private fun getCartItemsList() {
         FirestoreClass().getCartList(this@CartListActivity)
     }
 
@@ -81,5 +113,15 @@ class CartListActivity : BaseActivity() {
         toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
+    fun itemRemovedSuccess() {
+        hideProgressDialog()
 
+        Toast.makeText(
+            this@CartListActivity,
+            resources.getString(R.string.msg_item_removed_successfully),
+            Toast.LENGTH_LONG
+        ).show()
+
+        getCartItemsList()
+    }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.CartItem
@@ -112,10 +113,24 @@ class ProductDetailsActivity : BaseActivity() {
         binding.tvProductDetailsDescription.text = product.description
         binding.tvProductDetailsStockQuantity.text = product.stock_quantity
 
-        if (FirestoreClass().getCurrentUserID() == product.user_id) {
+        if (product.stock_quantity.toInt() == 0) {
             hideProgressDialog()
+
+            binding.btnAddToCart.visibility = View.GONE
+            binding.tvProductDetailsStockQuantity.text =
+                resources.getString(R.string.lbl_out_of_stock)
+            binding.tvProductDetailsStockQuantity.setTextColor(
+                ContextCompat.getColor(
+                    this@ProductDetailsActivity,
+                    R.color.colorSnackBarError
+                )
+            )
         } else {
-            FirestoreClass().checkIfItemExistInCart(this, productId)
+            if (FirestoreClass().getCurrentUserID() == product.user_id) {
+                hideProgressDialog()
+            } else {
+                FirestoreClass().checkIfItemExistInCart(this, productId)
+            }
         }
     }
 
