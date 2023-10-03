@@ -16,6 +16,7 @@ import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.data.models.User
 import sky.tavrov.affapplication.ui.activities.AddEditAddressActivity
 import sky.tavrov.affapplication.ui.activities.AddProductActivity
+import sky.tavrov.affapplication.ui.activities.AddressListActivity
 import sky.tavrov.affapplication.ui.activities.CartListActivity
 import sky.tavrov.affapplication.ui.activities.LoginActivity
 import sky.tavrov.affapplication.ui.activities.ProductDetailsActivity
@@ -486,6 +487,27 @@ class FirestoreClass {
                     "Error while adding the address.",
                     e
                 )
+            }
+    }
+
+    fun getAddressList(activity: AddressListActivity) {
+        fireStore.collection(Constants.ADDRESSES)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+                val addressList: ArrayList<Address> = ArrayList()
+                for (i in document.documents) {
+                    val address = i.toObject(Address::class.java)!!
+                    address.id = i.id
+                    addressList.add(address)
+                }
+
+                activity.successAddressListFromFirestore(addressList)
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while getting the address list.", e)
             }
     }
 }
