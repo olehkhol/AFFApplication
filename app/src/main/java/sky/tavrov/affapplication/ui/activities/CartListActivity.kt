@@ -1,5 +1,6 @@
 package sky.tavrov.affapplication.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -10,6 +11,7 @@ import sky.tavrov.affapplication.data.models.CartItem
 import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.databinding.ActivityCartListBinding
 import sky.tavrov.affapplication.ui.adapters.CartItemsListAdapter
+import sky.tavrov.affapplication.ui.utils.Constants
 
 class CartListActivity : BaseActivity() {
 
@@ -24,6 +26,15 @@ class CartListActivity : BaseActivity() {
             setContentView(root)
 
             setupActionBar(toolbarCartListActivity)
+
+            btnCheckout.setOnClickListener {
+                val intent = Intent(
+                    this@CartListActivity,
+                    AddressListActivity::class.java
+                )
+                intent.putExtra(Constants.EXTRA_SELECT_ADDRESS, true)
+                startActivity(intent)
+            }
         }
     }
 

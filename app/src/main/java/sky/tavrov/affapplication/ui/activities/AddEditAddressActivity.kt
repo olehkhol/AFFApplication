@@ -1,5 +1,7 @@
 package sky.tavrov.affapplication.ui.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -183,7 +185,7 @@ class AddEditAddressActivity : BaseActivity() {
             notifySuccessMessage,
             Toast.LENGTH_SHORT
         ).show()
-
+        setResult(RESULT_OK)
         finish()
     }
 }

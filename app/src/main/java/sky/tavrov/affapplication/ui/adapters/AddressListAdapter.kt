@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import sky.tavrov.affapplication.data.models.Address
 import sky.tavrov.affapplication.databinding.ItemAddressLayoutBinding
@@ -13,7 +14,8 @@ import sky.tavrov.affapplication.ui.utils.Constants
 
 class AddressListAdapter(
     private val context: Context,
-    private var list: List<Address>
+    private var list: List<Address>,
+    private val selectAddress: Boolean
 ) : RecyclerView.Adapter<AddressListAdapter.MyViewHolder>() {
 
     class MyViewHolder(val binding: ItemAddressLayoutBinding) :
@@ -37,6 +39,16 @@ class AddressListAdapter(
             tvAddressType.text = model.type
             tvAddressDetails.text = "${model.address}, ${model.zipCode}"
             tvAddressMobileNumber.text = model.mobileNumber
+
+            if (selectAddress) {
+                holder.itemView.setOnClickListener {
+                    Toast.makeText(
+                        context,
+                        "Selected address : ${model.address}, ${model.zipCode}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
         }
     }
 
@@ -47,7 +59,7 @@ class AddressListAdapter(
     fun notifyEditItem(activity: Activity, position: Int) {
         val intent = Intent(context, AddEditAddressActivity::class.java)
         intent.putExtra(Constants.EXTRA_ADDRESS_DETAILS, list[position])
-        activity.startActivity(intent)
+        activity.startActivityForResult(intent, Constants.ADD_ADDRESS_REQUEST_CODE)
 
         notifyItemChanged(position)
     }
