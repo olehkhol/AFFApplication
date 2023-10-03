@@ -3,10 +3,13 @@ package sky.tavrov.affapplication.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.Address
 import sky.tavrov.affapplication.databinding.ActivityAddressListBinding
+import sky.tavrov.affapplication.ui.adapters.AddressListAdapter
 
 class AddressListActivity : BaseActivity() {
 
@@ -42,7 +45,22 @@ class AddressListActivity : BaseActivity() {
         hideProgressDialog()
 
         for (i in addressList) {
-            Log.i("Name and Address", "${i.name} :: ${i.address}")
+            Log.i("Name and Address", "${i.name} ::  ${i.address}")
+        }
+        with(binding) {
+            if (addressList.size > 0) {
+                rvAddressList.visibility = View.VISIBLE
+                tvNoAddressFound.visibility = View.GONE
+
+                rvAddressList.layoutManager = LinearLayoutManager(this@AddressListActivity)
+                rvAddressList.setHasFixedSize(true)
+
+                val addressAdapter = AddressListAdapter(this@AddressListActivity, addressList)
+                rvAddressList.adapter = addressAdapter
+            } else {
+                rvAddressList.visibility = View.GONE
+                tvNoAddressFound.visibility = View.VISIBLE
+            }
         }
     }
 }
