@@ -1,13 +1,10 @@
 package sky.tavrov.affapplication.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.navigation.ui.setupActionBarWithNavController
-import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.databinding.ActivityAddressListBinding
 
-class AddressListActivity : AppCompatActivity() {
+class AddressListActivity : BaseActivity() {
 
     private val binding by lazy { ActivityAddressListBinding.inflate(layoutInflater) }
 
@@ -16,17 +13,12 @@ class AddressListActivity : AppCompatActivity() {
 
         with(binding) {
             setContentView(root)
-
             setupActionBar(toolbarAddressListActivity)
-        }
-    }
 
-    private fun setupActionBar(toolbar: Toolbar) {
-        setSupportActionBar(toolbar)
-
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+            tvAddAddress.setOnClickListener {
+                val intent = Intent(this@AddressListActivity, AddEditAddressActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 }

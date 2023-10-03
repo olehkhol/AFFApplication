@@ -6,6 +6,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import sky.tavrov.affapplication.R
@@ -25,6 +26,17 @@ open class BaseActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
+    }
+
+    fun setupActionBar(toolbar: Toolbar) {
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
+        }
+
+        toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     fun showErrorSnackBar(message: String, isError: Boolean) {

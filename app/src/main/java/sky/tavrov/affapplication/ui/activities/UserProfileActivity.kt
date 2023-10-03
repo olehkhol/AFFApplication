@@ -50,7 +50,7 @@ class UserProfileActivity : BaseActivity() {
                 etEmail.isEnabled = false
                 etEmail.setText(userDetails.email)
             } else {
-                setupActionBar()
+                setupActionBar(toolbarUserProfileActivity)
 
                 tvTitle.text = resources.getString(R.string.title_edit_profile)
                 GlideLoader(this@UserProfileActivity).loadUserPicture(
@@ -87,20 +87,6 @@ class UserProfileActivity : BaseActivity() {
             }
 
             ivUserPhoto.setOnClickListener(uploadPhoto())
-        }
-    }
-
-    private fun setupActionBar() {
-        setSupportActionBar(binding.toolbarUserProfileActivity)
-
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-        }
-
-        binding.toolbarUserProfileActivity.setNavigationOnClickListener {
-            onBackPressed()
         }
     }
 

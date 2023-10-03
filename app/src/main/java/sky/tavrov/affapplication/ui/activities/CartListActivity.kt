@@ -3,7 +3,6 @@ package sky.tavrov.affapplication.ui.activities
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
@@ -108,15 +107,6 @@ class CartListActivity : BaseActivity() {
         hideProgressDialog()
 
         getCartItemsList()
-    }
-
-    private fun setupActionBar(toolbar: Toolbar) {
-        setSupportActionBar(toolbar)
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
-        }
-        toolbar.setNavigationOnClickListener { onBackPressed() }
     }
 
     fun itemRemovedSuccess() {
