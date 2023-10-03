@@ -490,6 +490,40 @@ class FirestoreClass {
             }
     }
 
+    fun deleteAddress(activity: AddressListActivity, addressId: String) {
+        fireStore.collection(Constants.ADDRESSES)
+            .document(addressId)
+            .delete()
+            .addOnSuccessListener {
+                activity.deleteAddressSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while deleting the Address.",
+                    e
+                )
+            }
+    }
+
+    fun updateAddress(activity: AddEditAddressActivity, addressInfo: Address, addressId: String) {
+        fireStore.collection(Constants.ADDRESSES)
+            .document(addressId)
+            .set(addressInfo, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.addUpdateAddressSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while updating the Address.",
+                    e
+                )
+            }
+    }
+
     fun getAddressList(activity: AddressListActivity) {
         fireStore.collection(Constants.ADDRESSES)
             .whereEqualTo(Constants.USER_ID, getCurrentUserID())

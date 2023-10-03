@@ -26,6 +26,34 @@ class AddEditAddressActivity : BaseActivity() {
             if (intent.hasExtra(Constants.EXTRA_ADDRESS_DETAILS)) {
                 addressDetails = intent.getParcelableExtra(Constants.EXTRA_ADDRESS_DETAILS)
             }
+            if (addressDetails != null) {
+                if (addressDetails!!.id.isNotEmpty()) {
+                    tvTitle.text = resources.getString(R.string.title_edit_address)
+                    btnSubmitAddress.text = resources.getString(R.string.btn_lbl_update)
+
+                    etFullName.setText(addressDetails?.name)
+                    etPhoneNumber.setText(addressDetails?.mobileNumber)
+                    etAddress.setText(addressDetails?.address)
+                    etZipCode.setText(addressDetails?.zipCode)
+                    etAdditionalNote.setText(addressDetails?.additionalNote)
+
+                    when (addressDetails?.type) {
+                        Constants.HOME -> {
+                            rbHome.isChecked = true
+                        }
+
+                        Constants.OFFICE -> {
+                            rbOffice.isChecked = true
+                        }
+
+                        else -> {
+                            rbOther.isChecked = true
+                            tilOtherDetails.visibility = View.VISIBLE
+                            etOtherDetails.setText(addressDetails?.otherDetails)
+                        }
+                    }
+                }
+            }
 
             btnSubmitAddress.setOnClickListener { saveAddressToFirestore() }
             rgType.setOnCheckedChangeListener { _, checkedId ->
@@ -123,6 +151,19 @@ class AddEditAddressActivity : BaseActivity() {
                     otherDetails
                 )
 
+                if (addressDetails != null && addressDetails!!.id.isNotEmpty()) {
+                    FirestoreClass().updateAddress(
+                        this@AddEditAddressActivity,
+                        addressModel,
+                        addressDetails!!.id
+                    )
+                } else {
+                    FirestoreClass().addAddress(
+                        this@AddEditAddressActivity,
+                        addressModel
+                    )
+                }
+
                 FirestoreClass().addAddress(this@AddEditAddressActivity, addressModel)
             }
         }
@@ -131,9 +172,15 @@ class AddEditAddressActivity : BaseActivity() {
     fun addUpdateAddressSuccess() {
         hideProgressDialog()
 
+        val notifySuccessMessage: String = if (addressDetails != null && addressDetails!!.id.isNotEmpty()) {
+            resources.getString(R.string.msg_your_address_updated_successfully)
+        } else {
+            resources.getString(R.string.err_your_address_added_successfully)
+        }
+
         Toast.makeText(
             this@AddEditAddressActivity,
-            resources.getString(R.string.err_your_address_added_successfully),
+            notifySuccessMessage,
             Toast.LENGTH_SHORT
         ).show()
 

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +13,7 @@ import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.Address
 import sky.tavrov.affapplication.databinding.ActivityAddressListBinding
 import sky.tavrov.affapplication.ui.adapters.AddressListAdapter
+import sky.tavrov.affapplication.ui.utils.SwipeToDeleteCallback
 import sky.tavrov.affapplication.ui.utils.SwipeToEditCallback
 
 class AddressListActivity : BaseActivity() {
@@ -71,13 +73,37 @@ class AddressListActivity : BaseActivity() {
                         )
                     }
                 }
-
                 val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
                 editItemTouchHelper.attachToRecyclerView(rvAddressList)
+                val deleteSwipeHandler = object : SwipeToDeleteCallback(this@AddressListActivity) {
+
+                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                        showProgressDialog(resources.getString(R.string.please_wait))
+
+                        FirestoreClass().deleteAddress(
+                            this@AddressListActivity,
+                            addressList[viewHolder.adapterPosition].id
+                        )
+                    }
+                }
+                val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
+                deleteItemTouchHelper.attachToRecyclerView(rvAddressList)
             } else {
                 rvAddressList.visibility = View.GONE
                 tvNoAddressFound.visibility = View.VISIBLE
             }
         }
+    }
+
+    fun deleteAddressSuccess() {
+        hideProgressDialog()
+
+        Toast.makeText(
+            this@AddressListActivity,
+            resources.getString(R.string.err_your_address_added_successfully),
+            Toast.LENGTH_SHORT
+        ).show()
+
+        getAddressList()
     }
 }
