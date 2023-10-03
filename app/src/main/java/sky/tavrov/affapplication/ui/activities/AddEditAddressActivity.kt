@@ -14,14 +14,18 @@ import sky.tavrov.affapplication.ui.utils.trimmedText
 class AddEditAddressActivity : BaseActivity() {
 
     private val binding by lazy { ActivityAddEditAddressBinding.inflate(layoutInflater) }
+    private var addressDetails: Address? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         with(binding) {
             setContentView(root)
-
             setupActionBar(toolbarAddEditAddressActivity)
+
+            if (intent.hasExtra(Constants.EXTRA_ADDRESS_DETAILS)) {
+                addressDetails = intent.getParcelableExtra(Constants.EXTRA_ADDRESS_DETAILS)
+            }
 
             btnSubmitAddress.setOnClickListener { saveAddressToFirestore() }
             rgType.setOnCheckedChangeListener { _, checkedId ->

@@ -1,11 +1,15 @@
 package sky.tavrov.affapplication.ui.adapters
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import sky.tavrov.affapplication.data.models.Address
 import sky.tavrov.affapplication.databinding.ItemAddressLayoutBinding
+import sky.tavrov.affapplication.ui.activities.AddEditAddressActivity
+import sky.tavrov.affapplication.ui.utils.Constants
 
 class AddressListAdapter(
     private val context: Context,
@@ -22,7 +26,7 @@ class AddressListAdapter(
         val binding =
             ItemAddressLayoutBinding.inflate(LayoutInflater.from(context), parent, false)
 
-        return AddressListAdapter.MyViewHolder(binding)
+        return MyViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -38,5 +42,13 @@ class AddressListAdapter(
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    fun notifyEditItem(activity: Activity, position: Int) {
+        val intent = Intent(context, AddEditAddressActivity::class.java)
+        intent.putExtra(Constants.EXTRA_ADDRESS_DETAILS, list[position])
+        activity.startActivity(intent)
+
+        notifyItemChanged(position)
     }
 }

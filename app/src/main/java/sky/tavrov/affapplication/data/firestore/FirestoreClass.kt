@@ -497,7 +497,8 @@ class FirestoreClass {
             .addOnSuccessListener { document ->
                 Log.e(activity.javaClass.simpleName, document.documents.toString())
                 val addressList: ArrayList<Address> = ArrayList()
-                for (i in document.documents) {
+                val documents = document.documents
+                for (i in documents) {
                     val address = i.toObject(Address::class.java)!!
                     address.id = i.id
                     addressList.add(address)

@@ -27,6 +27,7 @@ object Constants {
     const val OFFICE: String = "Office"
     const val OTHER: String = "Other"
     const val ADDRESSES: String = "addresses"
+    const val EXTRA_ADDRESS_DETAILS: String = "AddressDetails"
 
     // Product related constants
     const val PRODUCTS: String = "products"

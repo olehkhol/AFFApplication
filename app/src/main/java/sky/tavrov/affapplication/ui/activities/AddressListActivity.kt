@@ -4,12 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.Address
 import sky.tavrov.affapplication.databinding.ActivityAddressListBinding
 import sky.tavrov.affapplication.ui.adapters.AddressListAdapter
+import sky.tavrov.affapplication.ui.utils.SwipeToEditCallback
 
 class AddressListActivity : BaseActivity() {
 
@@ -57,6 +60,20 @@ class AddressListActivity : BaseActivity() {
 
                 val addressAdapter = AddressListAdapter(this@AddressListActivity, addressList)
                 rvAddressList.adapter = addressAdapter
+
+                val editSwipeHandler = object : SwipeToEditCallback(this@AddressListActivity) {
+
+                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                        val adapter = rvAddressList.adapter as AddressListAdapter
+                        adapter.notifyEditItem(
+                            this@AddressListActivity,
+                            viewHolder.adapterPosition
+                        )
+                    }
+                }
+
+                val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
+                editItemTouchHelper.attachToRecyclerView(rvAddressList)
             } else {
                 rvAddressList.visibility = View.GONE
                 tvNoAddressFound.visibility = View.VISIBLE
