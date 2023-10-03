@@ -2,6 +2,8 @@ package sky.tavrov.affapplication.ui.activities
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
+import android.widget.Toast
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.Address
@@ -20,6 +22,12 @@ class AddEditAddressActivity : BaseActivity() {
             setContentView(root)
 
             setupActionBar(toolbarAddEditAddressActivity)
+
+            btnSubmitAddress.setOnClickListener { saveAddressToFirestore() }
+            rgType.setOnCheckedChangeListener { _, checkedId ->
+                tilOtherDetails.visibility =
+                    if (checkedId == R.id.rb_other) View.VISIBLE else View.GONE
+            }
         }
     }
 
@@ -100,7 +108,6 @@ class AddEditAddressActivity : BaseActivity() {
                         Constants.OTHER
                     }
                 }
-
                 val addressModel = Address(
                     FirestoreClass().getCurrentUserID(),
                     fullName,
@@ -111,7 +118,21 @@ class AddEditAddressActivity : BaseActivity() {
                     addressType,
                     otherDetails
                 )
+
+                FirestoreClass().addAddress(this@AddEditAddressActivity, addressModel)
             }
         }
+    }
+
+    fun addUpdateAddressSuccess() {
+        hideProgressDialog()
+
+        Toast.makeText(
+            this@AddEditAddressActivity,
+            resources.getString(R.string.err_your_address_added_successfully),
+            Toast.LENGTH_SHORT
+        ).show()
+
+        finish()
     }
 }

@@ -10,9 +10,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import sky.tavrov.affapplication.data.models.Address
 import sky.tavrov.affapplication.data.models.CartItem
 import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.data.models.User
+import sky.tavrov.affapplication.ui.activities.AddEditAddressActivity
 import sky.tavrov.affapplication.ui.activities.AddProductActivity
 import sky.tavrov.affapplication.ui.activities.CartListActivity
 import sky.tavrov.affapplication.ui.activities.LoginActivity
@@ -345,7 +347,7 @@ class FirestoreClass {
             .document(cartId)
             .update(itemHashMap)
             .addOnSuccessListener {
-                when(context) {
+                when (context) {
                     is CartListActivity -> {
                         context.itemUpdateSuccess()
                     }
@@ -465,6 +467,23 @@ class FirestoreClass {
                 Log.e(
                     context.javaClass.simpleName,
                     "Error while removing the item from the cart list.",
+                    e
+                )
+            }
+    }
+
+    fun addAddress(activity: AddEditAddressActivity, addressInfo: Address) {
+        fireStore.collection(Constants.ADDRESSES)
+            .document()
+            .set(addressInfo, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.addUpdateAddressSuccess()
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while adding the address.",
                     e
                 )
             }
