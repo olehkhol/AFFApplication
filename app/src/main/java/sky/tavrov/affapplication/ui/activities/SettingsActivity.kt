@@ -35,6 +35,10 @@ class SettingsActivity : BaseActivity() {
                 intent.putExtra(Constants.EXTRA_USER_DETAILS, userDetails)
                 startActivity(intent)
             }
+            llAddress.setOnClickListener {
+                val intent = Intent(this@SettingsActivity, AddressListActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
@@ -53,9 +57,7 @@ class SettingsActivity : BaseActivity() {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_white_color_back_24dp)
         }
 
-        binding.toolbarSettingsActivity.setNavigationOnClickListener {
-            onBackPressed()
-        }
+        binding.toolbarSettingsActivity.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun getUserDetails() {
