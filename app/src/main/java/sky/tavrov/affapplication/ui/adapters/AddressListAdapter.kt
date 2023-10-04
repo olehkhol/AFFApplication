@@ -5,11 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import sky.tavrov.affapplication.data.models.Address
 import sky.tavrov.affapplication.databinding.ItemAddressLayoutBinding
 import sky.tavrov.affapplication.ui.activities.AddEditAddressActivity
+import sky.tavrov.affapplication.ui.activities.CheckoutActivity
 import sky.tavrov.affapplication.ui.utils.Constants
 
 class AddressListAdapter(
@@ -34,19 +34,16 @@ class AddressListAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val model = list[position]
 
-        with(holder.binding) {
-            tvAddressFullName.text = model.name
-            tvAddressType.text = model.type
-            tvAddressDetails.text = "${model.address}, ${model.zipCode}"
-            tvAddressMobileNumber.text = model.mobileNumber
+        with(holder) {
+            binding.tvAddressFullName.text = model.name
+            binding.tvAddressType.text = model.type
+            binding.tvAddressDetails.text = "${model.address}, ${model.zipCode}"
+            binding.tvAddressMobileNumber.text = model.mobileNumber
 
             if (selectAddress) {
-                holder.itemView.setOnClickListener {
-                    Toast.makeText(
-                        context,
-                        "Selected address : ${model.address}, ${model.zipCode}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                itemView.setOnClickListener {
+                    val intent = Intent(context, CheckoutActivity::class.java)
+                    context.startActivity(intent)
                 }
             }
         }
