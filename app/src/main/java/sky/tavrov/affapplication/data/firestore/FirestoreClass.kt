@@ -26,6 +26,7 @@ import sky.tavrov.affapplication.ui.activities.ProductDetailsActivity
 import sky.tavrov.affapplication.ui.activities.RegisterActivity
 import sky.tavrov.affapplication.ui.activities.SettingsActivity
 import sky.tavrov.affapplication.ui.activities.UserProfileActivity
+import sky.tavrov.affapplication.ui.fragments.SoldProductsFragment
 import sky.tavrov.affapplication.ui.fragments.dashboards.DashboardFragment
 import sky.tavrov.affapplication.ui.fragments.orders.OrdersFragment
 import sky.tavrov.affapplication.ui.fragments.products.ProductsFragment
@@ -661,6 +662,35 @@ class FirestoreClass {
                 fragment.hideProgressDialog()
 
                 Log.e(fragment.javaClass.simpleName, "Error while getting the orders list.", e)
+            }
+    }
+
+    fun getSoldProductsList(fragment: SoldProductsFragment) {
+        fireStore.collection(Constants.SOLD_PRODUCTS)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .get()
+            .addOnSuccessListener { document ->
+                Log.e(fragment.javaClass.simpleName, document.documents.toString())
+
+                val list: ArrayList<SoldProduct> = ArrayList()
+
+                for (i in document.documents) {
+                    val soldProduct = i.toObject(SoldProduct::class.java)!!
+                    soldProduct.id = i.id
+
+                    list.add(soldProduct)
+                }
+
+                fragment.successSoldProductsList(list)
+            }
+            .addOnFailureListener { e ->
+                fragment.hideProgressDialog()
+
+                Log.e(
+                    fragment.javaClass.simpleName,
+                    "Error while getting the list of sold products.",
+                    e
+                )
             }
     }
 }
