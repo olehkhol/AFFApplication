@@ -1,12 +1,14 @@
 package sky.tavrov.affapplication.ui.activities
 
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
 import sky.tavrov.affapplication.R
 import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.data.models.Address
 import sky.tavrov.affapplication.data.models.CartItem
 import sky.tavrov.affapplication.data.models.Product
 import sky.tavrov.affapplication.databinding.ActivityCheckoutBinding
+import sky.tavrov.affapplication.ui.adapters.CartItemsListAdapter
 import sky.tavrov.affapplication.ui.utils.Constants
 
 class CheckoutActivity : BaseActivity() {
@@ -47,8 +49,8 @@ class CheckoutActivity : BaseActivity() {
         FirestoreClass().getAllProductsList(this@CheckoutActivity)
     }
 
-    fun successProductsListFromFireStore(productList: ArrayList<Product>) {
-        this.productsList = productsList
+    fun successProductsListFromFireStore(list: ArrayList<Product>) {
+        this.productsList = list
 
         getCartItemsList()
     }
@@ -57,9 +59,25 @@ class CheckoutActivity : BaseActivity() {
         FirestoreClass().getCartList(this@CheckoutActivity)
     }
 
-    fun successCartItemsList(cartList: ArrayList<CartItem>) {
+    fun successCartItemsList(list: ArrayList<CartItem>) {
         hideProgressDialog()
+        for (product in productsList) {
+            for (cartItem in list) {
+                if (product.product_id == cartItem.product_id) {
+                    cartItem.stock_quantity = product.stock_quantity
+                }
+            }
+        }
+        cartItemsList = list
 
-        cartItemsList = cartList
+        with(binding.rvCartListItems) {
+            layoutManager = LinearLayoutManager(this@CheckoutActivity)
+            setHasFixedSize(true)
+            adapter = CartItemsListAdapter(
+                this@CheckoutActivity,
+                cartItemsList,
+                false
+            )
+        }
     }
 }

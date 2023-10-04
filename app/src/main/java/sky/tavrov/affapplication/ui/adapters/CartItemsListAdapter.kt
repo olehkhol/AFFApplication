@@ -16,7 +16,8 @@ import sky.tavrov.affapplication.ui.utils.GlideLoader
 
 class CartItemsListAdapter(
     private val context: Context,
-    private var list: List<CartItem>
+    private var list: List<CartItem>,
+    private val updateCartItem: Boolean
 ) : RecyclerView.Adapter<CartItemsListAdapter.MyViewHolder>() {
 
     class MyViewHolder(val binding: ItemCartLayoutBinding) :
@@ -44,6 +45,8 @@ class CartItemsListAdapter(
             if (model.cart_quantity == "0") {
                 ibRemoveCartItem.visibility = View.GONE
                 ibAddCartItem.visibility = View.GONE
+                ibDeleteCartItem.visibility = if (updateCartItem) View.VISIBLE else View.GONE
+
                 tvCartQuantity.text = context.resources.getString(R.string.lbl_out_of_stock)
                 tvCartQuantity.setTextColor(
                     ContextCompat.getColor(
@@ -52,8 +55,15 @@ class CartItemsListAdapter(
                     )
                 )
             } else {
-                ibRemoveCartItem.visibility = View.VISIBLE
-                ibAddCartItem.visibility = View.VISIBLE
+                if (updateCartItem) {
+                    ibRemoveCartItem.visibility = View.VISIBLE
+                    ibAddCartItem.visibility = View.VISIBLE
+                    ibDeleteCartItem.visibility = View.VISIBLE
+                } else {
+                    ibRemoveCartItem.visibility = View.GONE
+                    ibAddCartItem.visibility = View.GONE
+                    ibDeleteCartItem.visibility = View.GONE
+                }
 
                 tvCartQuantity.setTextColor(
                     ContextCompat.getColor(

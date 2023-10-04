@@ -70,7 +70,8 @@ class CartListActivity : BaseActivity() {
 
                 rvCartItemsList.layoutManager = LinearLayoutManager(this@CartListActivity)
                 rvCartItemsList.setHasFixedSize(true)
-                val cartListAdapter = CartItemsListAdapter(this@CartListActivity, cartList)
+                val cartListAdapter =
+                    CartItemsListAdapter(this@CartListActivity, cartListItems, true)
                 rvCartItemsList.adapter = cartListAdapter
                 var subTotal = 0.0
                 for (item in cartList) {
