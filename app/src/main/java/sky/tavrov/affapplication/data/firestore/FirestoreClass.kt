@@ -18,6 +18,7 @@ import sky.tavrov.affapplication.ui.activities.AddEditAddressActivity
 import sky.tavrov.affapplication.ui.activities.AddProductActivity
 import sky.tavrov.affapplication.ui.activities.AddressListActivity
 import sky.tavrov.affapplication.ui.activities.CartListActivity
+import sky.tavrov.affapplication.ui.activities.CheckoutActivity
 import sky.tavrov.affapplication.ui.activities.LoginActivity
 import sky.tavrov.affapplication.ui.activities.ProductDetailsActivity
 import sky.tavrov.affapplication.ui.activities.RegisterActivity
@@ -413,11 +414,17 @@ class FirestoreClass {
                     is CartListActivity -> {
                         activity.successCartItemsList(list)
                     }
+                    is CheckoutActivity -> {
+                        activity.successCartItemsList(list)
+                    }
                 }
             }
             .addOnFailureListener { e ->
                 when (activity) {
                     is CartListActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is CheckoutActivity -> {
                         activity.hideProgressDialog()
                     }
                 }
@@ -426,7 +433,7 @@ class FirestoreClass {
             }
     }
 
-    fun getAllProductsList(activity: CartListActivity) {
+    fun getAllProductsList(activity: Activity) {
         fireStore.collection(Constants.PRODUCTS)
             .get()
             .addOnSuccessListener { document ->
@@ -439,10 +446,24 @@ class FirestoreClass {
                     productList.add(product)
                 }
 
-                activity.successProductListFromFireStore(productList)
+                when(activity) {
+                    is CartListActivity -> {
+                        activity.successProductsListFromFireStore(productList)
+                    }
+                    is CheckoutActivity -> {
+                        activity.successProductsListFromFireStore(productList)
+                    }
+                }
             }
             .addOnFailureListener { e ->
-                activity.hideProgressDialog()
+                when(activity) {
+                    is CartListActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is CheckoutActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
 
                 Log.e("Get Product List", "Error while getting all product list.", e)
             }

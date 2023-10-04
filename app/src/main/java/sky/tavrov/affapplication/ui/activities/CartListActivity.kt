@@ -98,7 +98,7 @@ class CartListActivity : BaseActivity() {
         }
     }
 
-    fun successProductListFromFireStore(productsList: ArrayList<Product>) {
+    fun successProductsListFromFireStore(productsList: ArrayList<Product>) {
         hideProgressDialog()
         this.productsList = productsList
 
