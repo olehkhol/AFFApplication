@@ -40,6 +40,7 @@ object Constants {
     const val EXTRA_PRODUCT_OWNER_ID: String = "extra_product_owner_id"
     const val ORDERS: String = "orders"
     const val EXTRA_MY_ORDER_DETAILS: String = "extra_MY_ORDER_DETAILS"
+    const val SOLD_PRODUCTS: String = "sold_products"
 
     // Cart related constants
     const val DEFAULT_CART_QUANTITY: String = "1"

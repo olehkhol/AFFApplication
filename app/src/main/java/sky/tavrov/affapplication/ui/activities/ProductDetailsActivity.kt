@@ -58,6 +58,7 @@ class ProductDetailsActivity : BaseActivity() {
     private fun addToCart() {
         val addToCart = CartItem(
             FirestoreClass().getCurrentUserID(),
+            productOwnerId,
             productId,
             productDetails.title,
             productDetails.price,

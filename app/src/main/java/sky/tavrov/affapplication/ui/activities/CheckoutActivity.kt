@@ -23,6 +23,7 @@ class CheckoutActivity : BaseActivity() {
     private lateinit var cartItemsList: ArrayList<CartItem>
     private var mSubTotal: Double = 0.0
     private var mTotalAmount: Double = 0.0
+    private lateinit var orderDetails: Order
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,7 +92,7 @@ class CheckoutActivity : BaseActivity() {
     }
 
     fun orderPlacedSuccess() {
-        FirestoreClass().updateAllDetails(this, cartItemsList)
+        FirestoreClass().updateAllDetails(this, cartItemsList, orderDetails)
     }
 
     private fun getProductList() {
