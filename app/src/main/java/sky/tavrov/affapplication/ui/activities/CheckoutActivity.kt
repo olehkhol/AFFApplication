@@ -60,14 +60,14 @@ class CheckoutActivity : BaseActivity() {
 
         if (addressDetails != null) {
             val order = Order(
-                FirestoreClass().getCurrentUserID(),
-                cartItemsList,
-                addressDetails!!,
-                "My order ${System.currentTimeMillis()}",
-                cartItemsList[0].image,
-                mSubTotal.toString(),
-                "10.0",
-                mTotalAmount.toString(),
+                    FirestoreClass().getCurrentUserID(),
+                    cartItemsList,
+                    addressDetails!!,
+                    "My order ${System.currentTimeMillis()}",
+                    cartItemsList[0].image,
+                    mSubTotal.toString(),
+                    "10.0",
+                    mTotalAmount.toString(),
             )
 
             FirestoreClass().placeOrder(this@CheckoutActivity, order)
@@ -78,7 +78,9 @@ class CheckoutActivity : BaseActivity() {
         hideProgressDialog()
 
         Toast.makeText(
-                this@CheckoutActivity, "Your order placed successfully.", Toast.LENGTH_SHORT
+                this@CheckoutActivity,
+                "Your order placed successfully.",
+                Toast.LENGTH_SHORT
         ).show()
 
         val intent = Intent(this@CheckoutActivity, DashboardActivity::class.java)
@@ -123,9 +125,9 @@ class CheckoutActivity : BaseActivity() {
             rvCartListItems.layoutManager = LinearLayoutManager(this@CheckoutActivity)
             rvCartListItems.setHasFixedSize(true)
             rvCartListItems.adapter = CartItemsListAdapter(
-                this@CheckoutActivity,
-                cartItemsList,
-                false
+                    this@CheckoutActivity,
+                    cartItemsList,
+                    false
             )
 
             for (item in cartItemsList) {

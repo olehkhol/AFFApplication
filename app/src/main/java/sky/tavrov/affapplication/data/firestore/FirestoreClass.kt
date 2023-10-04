@@ -26,6 +26,7 @@ import sky.tavrov.affapplication.ui.activities.RegisterActivity
 import sky.tavrov.affapplication.ui.activities.SettingsActivity
 import sky.tavrov.affapplication.ui.activities.UserProfileActivity
 import sky.tavrov.affapplication.ui.fragments.dashboards.DashboardFragment
+import sky.tavrov.affapplication.ui.fragments.orders.OrdersFragment
 import sky.tavrov.affapplication.ui.fragments.products.ProductsFragment
 import sky.tavrov.affapplication.ui.utils.Constants
 
@@ -621,6 +622,31 @@ class FirestoreClass {
                     activity.hideProgressDialog()
 
                     Log.e(activity.javaClass.simpleName, "Error while updating all the details after order place.", it)
+                }
+    }
+
+    fun getMyOrdersList(fragment: OrdersFragment) {
+        fireStore.collection(Constants.ORDERS)
+                .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+                .get()
+                .addOnSuccessListener { document ->
+                    Log.e(fragment.javaClass.simpleName, document.documents.toString())
+                    val list: ArrayList<Order> = ArrayList()
+
+                    for (i in document.documents) {
+
+                        val orderItem = i.toObject(Order::class.java)!!
+                        orderItem.id = i.id
+
+                        list.add(orderItem)
+                    }
+
+                    fragment.populateOrdersListInUI(list)
+                }
+                .addOnFailureListener { e ->
+                    fragment.hideProgressDialog()
+
+                    Log.e(fragment.javaClass.simpleName, "Error while getting the orders list.", e)
                 }
     }
 }
