@@ -44,6 +44,7 @@ object Constants {
     const val DEFAULT_CART_QUANTITY: String = "1"
     const val CART_ITEMS: String = "cart_items"
     const val CART_QUANTITY: String = "cart_quantity"
+    const val STOCK_QUANTITY: String = "stock_quantity"
 
     // App related constants
     const val MY_SHOP_PAL_PREFERENCES: String = "MyShopPalPrefs"
@@ -53,14 +54,14 @@ object Constants {
     // Utility functions
     fun showImageChooser(activity: Activity) {
         val galleryIntent = Intent(
-            Intent.ACTION_PICK,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         )
         activity.startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST_CODE)
     }
 
     fun getFileExtension(activity: Activity, uri: Uri?): String? {
         return MimeTypeMap.getSingleton()
-            .getExtensionFromMimeType(uri?.let { activity.contentResolver.getType(it) })
+                .getExtensionFromMimeType(uri?.let { activity.contentResolver.getType(it) })
     }
 }
