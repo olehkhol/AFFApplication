@@ -60,7 +60,7 @@ class CheckoutActivity : BaseActivity() {
         showProgressDialog(resources.getString(R.string.please_wait))
 
         if (addressDetails != null) {
-            val order = Order(
+            orderDetails = Order(
                 FirestoreClass().getCurrentUserID(),
                 cartItemsList,
                 addressDetails!!,
@@ -72,7 +72,7 @@ class CheckoutActivity : BaseActivity() {
                 System.currentTimeMillis()
             )
 
-            FirestoreClass().placeOrder(this@CheckoutActivity, order)
+            FirestoreClass().placeOrder(this@CheckoutActivity, orderDetails)
         }
     }
 

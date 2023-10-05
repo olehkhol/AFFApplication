@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import sky.tavrov.affapplication.data.firestore.FirestoreClass
 import sky.tavrov.affapplication.databinding.ActivitySplashBinding
 
 @SuppressLint("CustomSplashScreen") // TODO https://developer.android.com/guide/topics/ui/splash-screen
@@ -21,10 +22,16 @@ class SplashActivity : BaseActivity() {
 
         Handler().postDelayed(
             {
-                startActivity(Intent(this@SplashActivity, DashboardActivity::class.java))
+                val currentUserId = FirestoreClass().getCurrentUserID()
+
+                if (currentUserId.isNotEmpty()) {
+                    startActivity(Intent(this@SplashActivity, DashboardActivity::class.java))
+                } else {
+                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                }
                 finish()
             },
-            1500
+            2500
         )
     }
 }

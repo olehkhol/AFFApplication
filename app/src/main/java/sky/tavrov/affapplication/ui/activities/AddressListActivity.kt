@@ -41,6 +41,8 @@ class AddressListActivity : BaseActivity() {
             if (selectAddress) {
                 tvTitle.text = resources.getString(R.string.title_select_address)
             }
+
+            getAddressList()
         }
     }
 
